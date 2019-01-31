@@ -18,18 +18,18 @@
   
   
   <title>tar压缩解压缩命令详解 | TonyJiangWJ的个人博客</title>
-  <meta name="description" content="tar压缩解压缩命令详解">
+  <meta name="description" content="命令详解1234567891011121314-c: 建立压缩档案-x：解压-t：查看内容-r：向压缩归档文件末尾追加文件-u：更新原压缩包中的文件这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。-z：有gzip属性的-j：有bz2属性的-Z：有compress属性的-v：显示所有过程-O：将文件解开到标准输出参数-">
 <meta name="keywords" content="linux,脚本命令">
 <meta property="og:type" content="article">
 <meta property="og:title" content="tar压缩解压缩命令详解">
 <meta property="og:url" content="https://tonyjiangwj.github.io/2018/08/13/tar压缩解压缩命令详解/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="tar压缩解压缩命令详解">
+<meta property="og:description" content="命令详解1234567891011121314-c: 建立压缩档案-x：解压-t：查看内容-r：向压缩归档文件末尾追加文件-u：更新原压缩包中的文件这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。-z：有gzip属性的-j：有bz2属性的-Z：有compress属性的-v：显示所有过程-O：将文件解开到标准输出参数-">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-31T03:11:13.420Z">
+<meta property="og:updated_time" content="2019-01-31T07:08:26.030Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tar压缩解压缩命令详解">
-<meta name="twitter:description" content="tar压缩解压缩命令详解">
+<meta name="twitter:description" content="命令详解1234567891011121314-c: 建立压缩档案-x：解压-t：查看内容-r：向压缩归档文件末尾追加文件-u：更新原压缩包中的文件这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。-z：有gzip属性的-j：有bz2属性的-Z：有compress属性的-v：显示所有过程-O：将文件解开到标准输出参数-">
   <!-- Canonical links -->
   <link rel="canonical" href="https://tonyjiangwj.github.io/2018/08/13/tar压缩解压缩命令详解/index.html">
   
@@ -360,7 +360,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/08/13/tar压缩解压缩命令详解/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 515(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 505(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 2(分)</span>
@@ -370,7 +370,7 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h1 id="tar压缩解压缩命令详解"><a href="#tar压缩解压缩命令详解" class="headerlink" title="tar压缩解压缩命令详解"></a>tar压缩解压缩命令详解</h1><a id="more"></a>
+        <a id="more"></a>
 <h2 id="命令详解"><a href="#命令详解" class="headerlink" title="命令详解"></a>命令详解</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-c: 建立压缩档案</span><br><span class="line">-x：解压</span><br><span class="line">-t：查看内容</span><br><span class="line">-r：向压缩归档文件末尾追加文件</span><br><span class="line">-u：更新原压缩包中的文件</span><br><span class="line">这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。</span><br><span class="line">下面的参数是根据需要在压缩或解压档案时可选的。</span><br><span class="line">-z：有gzip属性的</span><br><span class="line">-j：有bz2属性的</span><br><span class="line">-Z：有compress属性的</span><br><span class="line">-v：显示所有过程</span><br><span class="line">-O：将文件解开到标准输出</span><br><span class="line">参数-f是必须的</span><br><span class="line">-f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。</span><br></pre></td></tr></table></figure>
 <h2 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -tf aaa.tar.gz 在不解压的情况下查看压缩包的内容</span><br><span class="line">tar -tvf aa.tar.gz 查看详细内容</span><br></pre></td></tr></table></figure>
 <h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar –cvf jpg.tar *.jpg 将目录里所有jpg文件打包成tar.jpg</span><br><span class="line">tar –zcvf jpg.tar.gz *.jpg 将目录里所有jpg文件打包成jpg.tar后，并且将其用gzip压缩，生成一个gzip压缩过的包，命名为jpg.tar.gz</span><br><span class="line">tar –jcvf jpg.tar.bz2 *.jpg 将目录里所有jpg文件打包成jpg.tar后，并且将其用bzip2压缩，生成一个bzip2压缩过的包，命名为jpg.tar.bz2</span><br><span class="line">tar –Zcvf jpg.tar.Z *.jpg   将目录里所有jpg文件打包成jpg.tar后，并且将其用compress压缩，生成一个umcompress压缩过的包，命名为jpg.tar.Z</span><br></pre></td></tr></table></figure>
