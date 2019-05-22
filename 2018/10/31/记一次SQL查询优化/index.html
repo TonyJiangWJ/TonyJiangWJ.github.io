@@ -25,7 +25,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="场景：A表数据量大概6万，B表数据量在120万左右，需要在A,B 表中联合查询出符合条件的A表中的数据，不需要B表中的内容，B表中的记录仅仅作为查询条件。  主要关联关系是B表中的object_id保存着A表中的id，表结构大致如下 1234567891011121314151617create table A(	id bigint primary key auto_increment,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-31T03:11:13.420Z">
+<meta property="og:updated_time" content="2019-05-22T08:05:38.302Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次SQL查询优化">
 <meta name="twitter:description" content="场景：A表数据量大概6万，B表数据量在120万左右，需要在A,B 表中联合查询出符合条件的A表中的数据，不需要B表中的内容，B表中的记录仅仅作为查询条件。  主要关联关系是B表中的object_id保存着A表中的id，表结构大致如下 1234567891011121314151617create table A(	id bigint primary key auto_increment,">
@@ -349,7 +349,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/10/31/记一次SQL查询优化/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1,120(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1,173(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
@@ -387,6 +387,14 @@
 <li><p>最终的SQL优化如下</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> A.* <span class="keyword">from</span> A <span class="keyword">where</span> A.condition1=<span class="string">'A条件'</span> <span class="keyword">and</span> A.cat_id=$catId$ </span><br><span class="line">  <span class="keyword">and</span> <span class="keyword">exists</span> ( <span class="keyword">select</span> t1.* <span class="keyword">from</span> B t1 <span class="keyword">on</span> t1.attr_id=$attr1$ <span class="keyword">and</span> A.id=t1.object_id <span class="keyword">and</span> t1.cat_id=$catId$ <span class="keyword">and</span> t1.value <span class="keyword">like</span> <span class="string">'%条件1%'</span>)</span><br><span class="line">  <span class="keyword">and</span> <span class="keyword">exists</span> ( <span class="keyword">select</span> t2.* <span class="keyword">from</span> B t2 <span class="keyword">on</span> t2.attr_id=$attr2$ <span class="keyword">and</span> A.id=t2.object_id <span class="keyword">and</span> t2.cat_id=$catId$ <span class="keyword">and</span></span><br><span class="line">  t2.value <span class="keyword">like</span> <span class="string">'%条件2%'</span>)</span><br><span class="line">  <span class="keyword">and</span> <span class="keyword">exists</span> (<span class="keyword">select</span> t3.* <span class="keyword">from</span> B t3 <span class="keyword">on</span> t3.attr_id=$attr3$ <span class="keyword">and</span> A.id=t3.object_id <span class="keyword">and</span> t3.cat_id=$catId$ <span class="keyword">and</span></span><br><span class="line">  t3.value <span class="keyword">like</span> <span class="string">'%条件3%'</span>)</span><br><span class="line">  ....</span><br></pre></td></tr></table></figure>
 <p>在同等数据量的情况下，将2-3s的查询操作优化到了150ms左右，可以说是质变了</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li>需要注意的是并不是所有情况下都可以使用exists来替代in操作<ul>
+<li>IN适合于外表大而内表小的情况；</li>
+<li>EXISTS适合于外表小而内表大的情况。</li>
+</ul>
 </li>
 </ul>
 <hr>
@@ -438,6 +446,10 @@
     
   <section id="comments">
   	
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDMzNi8yMDg2OA==">
+        <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>    
+    
   </section>
 
 
@@ -524,6 +536,22 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
    
+    
+<script defer type="text/javascript">
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+
+    if (typeof LivereTower === 'function') { return; }
+
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+
 
 
 
