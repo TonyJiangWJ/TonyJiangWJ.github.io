@@ -17,21 +17,24 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>常用命令小计 | TonyJiangWJ的个人博客</title>
-  <meta name="description" content="记录工作中用到的一些比较实用的命令，包括Windows和Linux下的。持续更新中">
-<meta name="keywords" content="shell,脚本命令">
+  <title>分布式事务TX-LCN原理分析 | TonyJiangWJ的个人博客</title>
+  <meta name="description" content="分布式事务框架 TX-LCN原理分析分布式事务的多种形式 XA 基于数据库实现，对数据库是否支持依赖较重。 TCC 主要基于业务代码控制，分为try/commit/cancel三阶段。业务侵入强，开发和维护难度大。 TXC 基于对SQL的分析，保存SQL执行所影响到的数据快照，在失败后进行回滚。业务侵入低，对SQL兼容要求高，部分SQL不支持。 LCN 通过代理数据库连接对事务进行控制。通过静态代">
+<meta name="keywords" content="Java,后端">
 <meta property="og:type" content="article">
-<meta property="og:title" content="常用命令小计">
-<meta property="og:url" content="https://tonyjiangwj.github.io/2018/08/09/常用命令小计/index.html">
+<meta property="og:title" content="分布式事务TX-LCN原理分析">
+<meta property="og:url" content="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="记录工作中用到的一些比较实用的命令，包括Windows和Linux下的。持续更新中">
+<meta property="og:description" content="分布式事务框架 TX-LCN原理分析分布式事务的多种形式 XA 基于数据库实现，对数据库是否支持依赖较重。 TCC 主要基于业务代码控制，分为try/commit/cancel三阶段。业务侵入强，开发和维护难度大。 TXC 基于对SQL的分析，保存SQL执行所影响到的数据快照，在失败后进行回滚。业务侵入低，对SQL兼容要求高，部分SQL不支持。 LCN 通过代理数据库连接对事务进行控制。通过静态代">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-31T03:11:13.420Z">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/assets/abc.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/assets/yuanli.png">
+<meta property="og:updated_time" content="2019-11-01T05:51:47.142Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="常用命令小计">
-<meta name="twitter:description" content="记录工作中用到的一些比较实用的命令，包括Windows和Linux下的。持续更新中">
+<meta name="twitter:title" content="分布式事务TX-LCN原理分析">
+<meta name="twitter:description" content="分布式事务框架 TX-LCN原理分析分布式事务的多种形式 XA 基于数据库实现，对数据库是否支持依赖较重。 TCC 主要基于业务代码控制，分为try/commit/cancel三阶段。业务侵入强，开发和维护难度大。 TXC 基于对SQL的分析，保存SQL执行所影响到的数据快照，在失败后进行回滚。业务侵入低，对SQL兼容要求高，部分SQL不支持。 LCN 通过代理数据库连接对事务进行控制。通过静态代">
+<meta name="twitter:image" content="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/assets/abc.png">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://tonyjiangwj.github.io/2018/08/09/常用命令小计/index.html">
+  <link rel="canonical" href="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/index.html">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -316,14 +319,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-常用命令小计" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-分布式事务TX-LCN原理分析" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      常用命令小计
+      分布式事务TX-LCN原理分析
     </h1>
   
 
@@ -331,15 +334,15 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2018/08/09/常用命令小计/" class="article-date">
-	  <time datetime="2018-08-09T07:32:04.000Z" itemprop="datePublished">2018-08-09</time>
+	<a href="/2019/10/17/分布式事务TX-LCN原理分析/" class="article-date">
+	  <time datetime="2019-10-17T06:29:11.000Z" itemprop="datePublished">2019-10-17</time>
 	</a>
 </span>
         
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link" href="/tags/shell/">shell</a>, <a class="article-tag-link" href="/tags/脚本命令/">脚本命令</a>
+	<a class="article-tag-link" href="/tags/Java/">Java</a>, <a class="article-tag-link" href="/tags/后端/">后端</a>
   </span>
 
 
@@ -352,51 +355,73 @@
 	</span>
 
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/08/09/常用命令小计/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/10/17/分布式事务TX-LCN原理分析/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 988(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1,459(字)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
 	
 
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>记录工作中用到的一些比较实用的命令，包括Windows和Linux下的。持续更新中<a id="more"></a></p>
-<h2 id="Maven命令"><a href="#Maven命令" class="headerlink" title="Maven命令"></a>Maven命令</h2><h3 id="常用基本命令"><a href="#常用基本命令" class="headerlink" title="常用基本命令"></a>常用基本命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">创建maven项目：mvn archetype:create</span><br><span class="line">指定 group： -DgroupId=packageName</span><br><span class="line">指定 artifact：-DartifactId=projectName</span><br><span class="line">创建web项目：-DarchetypeArtifactId=maven-archetype-webapp</span><br><span class="line">创建maven项目：mvn archetype:generate</span><br><span class="line">验证项目是否正确：mvn validate</span><br><span class="line">maven 打包：mvn package</span><br><span class="line">只打jar包：mvn jar:jar</span><br><span class="line">生成源码jar包：mvn <span class="built_in">source</span>:jar</span><br><span class="line">产生应用需要的任何额外的源代码：mvn generate-sources</span><br><span class="line">编译源代码： mvn compile</span><br><span class="line">编译测试代码：mvn <span class="built_in">test</span>-compile</span><br><span class="line">运行测试：mvn <span class="built_in">test</span></span><br><span class="line">运行检查：mvn verify</span><br><span class="line">清理maven项目：mvn clean</span><br><span class="line">生成eclipse项目：mvn eclipse:eclipse</span><br><span class="line">清理eclipse配置：mvn eclipse:clean</span><br><span class="line">生成idea项目：mvn idea:idea</span><br><span class="line">安装项目到本地仓库：mvn install</span><br><span class="line">发布项目到远程仓库：mvn deploy</span><br><span class="line">在集成测试可以运行的环境中处理和发布包：mvn integration-test</span><br><span class="line">显示maven依赖树：mvn dependency:tree</span><br><span class="line">显示maven依赖列表：mvn dependency:list</span><br><span class="line">分析maven依赖情况：mvn dependency:analyze</span><br><span class="line">下载依赖包的源码：mvn dependency:sources</span><br><span class="line">安装本地jar到本地仓库：mvn install:install-file -DgroupId=packageName -DartifactId=projectName -Dversion=version -Dpackaging=jar -Dfile=path</span><br></pre></td></tr></table></figure>
-<p>maven 命令的格式为 mvn [plugin-name]:[goal-name]，可以接受的参数如下，</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-D 指定参数，如 -Dmaven.test.skip(=<span class="literal">true</span>可选项) 跳过单元测试；</span><br><span class="line">-P 指定 Profile 配置，可以用于区分环境；</span><br><span class="line">-e 显示maven运行出错的信息；</span><br><span class="line">-o 离线执行命令,即不去远程仓库更新包；</span><br><span class="line">-X 显示maven允许的debug信息；</span><br><span class="line">-U 强制去远程更新snapshot的插件或依赖，默认每天只更新一次。</span><br></pre></td></tr></table></figure>
-<p>maven分析依赖情况，通过该命令可以快速定位依赖情况，然后通过在pom里面添加exclusion排除冲突的依赖</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mvn dependency:tree -Dverbose -Dincludes=groupId:artifactId:version</span><br><span class="line"><span class="comment"># -Dverbose显示详细信息</span></span><br><span class="line"><span class="comment"># -Dincludes指定包含的包，可以用*匹配如-Dincludes=org.apache.*:*</span></span><br><span class="line"><span class="comment"># -Dexcludes排除包，类似于includes</span></span><br></pre></td></tr></table></figure>
-<h3 id="web项目相关命令"><a href="#web项目相关命令" class="headerlink" title="web项目相关命令"></a>web项目相关命令</h3><ul>
-<li>启动tomcat：mvn tomcat:run</li>
-<li>启动jetty：mvn jetty:run</li>
-<li>运行打包部署：mvn tomcat:deploy</li>
-<li>撤销部署：mvn tomcat:undeploy</li>
-<li>启动web应用：mvn tomcat:start</li>
-<li>停止web应用：mvn tomcat:stop</li>
-<li>重新部署：mvn tomcat:redeploy</li>
-<li>部署展开的war文件：mvn war:exploded tomcat:exploded</li>
+        <h2 id="分布式事务框架-TX-LCN原理分析"><a href="#分布式事务框架-TX-LCN原理分析" class="headerlink" title="分布式事务框架 TX-LCN原理分析"></a>分布式事务框架 TX-LCN原理分析</h2><h3 id="分布式事务的多种形式"><a href="#分布式事务的多种形式" class="headerlink" title="分布式事务的多种形式"></a>分布式事务的多种形式</h3><ul>
+<li>XA 基于数据库实现，对数据库是否支持依赖较重。</li>
+<li>TCC 主要基于业务代码控制，分为try/commit/cancel三阶段。业务侵入强，开发和维护难度大。</li>
+<li>TXC 基于对SQL的分析，保存SQL执行所影响到的数据快照，在失败后进行回滚。业务侵入低，对SQL兼容要求高，部分SQL不支持。</li>
+<li>LCN 通过代理数据库连接对事务进行控制。通过静态代理方式包装原来的数据库连接，根据事务状态控制提交和回滚。业务侵入低，但是因为需要代理数据库连接，必须有本地事务，同时会增加连接占用时间。</li>
 </ul>
-<h2 id="Linux下自动化脚本"><a href="#Linux下自动化脚本" class="headerlink" title="Linux下自动化脚本"></a>Linux下自动化脚本</h2><h3 id="根据输入进程描述自动杀死进程"><a href="#根据输入进程描述自动杀死进程" class="headerlink" title="根据输入进程描述自动杀死进程"></a>根据输入进程描述自动杀死进程</h3><ul>
-<li><p>有时候要杀死tomcat进程通常都是分步骤找到pid再kill</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ps -ef | grep desc</span></span><br><span class="line">email     6762     1  0 Aug07 ?        00:01:03 processDesc</span><br><span class="line"><span class="meta">#</span><span class="bash">得到上述pid 6762然后<span class="built_in">kill</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">kill</span> -s 9 6762</span></span><br></pre></td></tr></table></figure>
+<h3 id="一、TX-LCN介绍"><a href="#一、TX-LCN介绍" class="headerlink" title="一、TX-LCN介绍"></a>一、TX-LCN介绍</h3><ul>
+<li>LCN名字来源：锁定事务单元（Lock）、确认事务模块状态（Confirm）、通知事务（Notify）</li>
+<li>TX-LCN是一款事务协调框架，其本身不操作事务，而是基于对事务的协调从而达到事务一致性的效果。</li>
+<li>在一个分布式系统下存在多个模块，需要协调完成一次业务，那就存在一次业务事务下可能横跨多种数据源节点的可能。TX-LCN可以解决这样的问题：存在服务模块A、B、C。A模块是MySQL为数据源的服务，B模块是基于Redis为数据源的服务，C模块是基于MongoDB为数据源的服务。若要解决他们的事务一致性就需要针对不同的节点采用不同的方案，并同意协调完成分布式事务的处理。</li>
+<li><p><img src="./assets/abc.png" alt="img"></p>
 </li>
-<li><p>以上操作往往效率比较低，现在可以通过awk配合<code>ps -ef | grep desc</code> 命令自动获取pid并杀死进程，可以将下述代码保存为可执行文件，在后续直接执行并输入进程描述来达成自动杀死进程的目的。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">kill_func() &#123;</span><br><span class="line"><span class="meta">  #</span><span class="bash">赋值输入的进程描述信息</span></span><br><span class="line">  processDesc=$1</span><br><span class="line"><span class="meta">  #</span><span class="bash">得到进程描述信息匹配到的进程数量，如果不唯一则退出，防止误杀</span></span><br><span class="line">  PCOUNT=$(ps -ef | grep $processDesc | grep -v grep | awk 'END&#123;print NR&#125;')</span><br><span class="line">  if [ $PCOUNT -gt 1 ]; then</span><br><span class="line">    echo "for input [$processDesc] found $PCOUNT processes, pid is not unique,please recheck your input."</span><br><span class="line">    exit</span><br><span class="line">  elif [ $PCOUNT -eq 0 ]; then</span><br><span class="line">    echo "process $processDesc not exist"</span><br><span class="line">    exit</span><br><span class="line">  fi</span><br><span class="line"><span class="meta">  #</span><span class="bash">得到进程PID然后执行<span class="built_in">kill</span></span></span><br><span class="line">  PID=$(ps -ef |grep $processDesc | grep -v grep | awk '&#123;printf $2&#125;')</span><br><span class="line">  if [ $? -eq 0 ]; then</span><br><span class="line">    echo "process id:$PID"</span><br><span class="line">  else</span><br><span class="line">    echo "process $processDesc not exist"</span><br><span class="line">    exit</span><br><span class="line">  fi</span><br><span class="line">  kill -9 $&#123;PID&#125;</span><br><span class="line">  if [ $? -eq 0 ];then</span><br><span class="line">    echo "kill $processDesc success"</span><br><span class="line">  else</span><br><span class="line">    echo "kill $processDesc fail"</span><br><span class="line">  fi</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#</span><span class="bash">输入进程描述信息</span></span><br><span class="line">echo "please input process descripe info"</span><br><span class="line">read input</span><br><span class="line">kill_func $input</span><br><span class="line">echo "done!"</span><br></pre></td></tr></table></figure>
+<li><p>方案：采用TX-LCN分布式事务框架，则可以将模块A使用LCN模式，B、C采用TCC模式完美解决。</p>
+</li>
+<li><p>TX-LCN主要分为Tx-Client和Tx-Manager两个模块，TC作为微服务下的依赖，是事务的发起方。TM是独立的服务，是事务的控制方，用于协调事务。</p>
+</li>
+<li><p><img src="./assets/yuanli.png" alt="img"></p>
+</li>
+<li><p>核心步骤如下：</p>
+<ul>
+<li><p>创建事务组</p>
+<p>是指在事务发起方开始执行业务代码前先调用TxManager创建事务组对象，然后拿到事务标志GroupId的过程</p>
+</li>
+<li><p>加入事务组</p>
+<p>是指参与方在执行完业务方法后，将该模块的事务信息通知给TxManager的操作</p>
+</li>
+<li><p>通知事务组</p>
+<p>在发起方执行完业务代码后，将发起方执行结果状态通知给TxManager，TxManager根据事务最终状态和事务组的信息来通知相应的参与模块提交或回滚事务，并返回结果给事务发起方。</p>
 </li>
 </ul>
-<p>##Linux下常用命令</p>
-<h3 id="查看当前目录下各个文件夹的大小"><a href="#查看当前目录下各个文件夹的大小" class="headerlink" title="查看当前目录下各个文件夹的大小"></a>查看当前目录下各个文件夹的大小</h3><ul>
-<li><code>du -h --max-depth=1</code> -h命令用来人性化展示容量单位 达到1000k用m 1000m用G,依次类推</li>
+</li>
 </ul>
-<h3 id="查看磁盘总体用量"><a href="#查看磁盘总体用量" class="headerlink" title="查看磁盘总体用量"></a>查看磁盘总体用量</h3><ul>
-<li><code>df -h</code></li>
+<h3 id="二、事务协调机制"><a href="#二、事务协调机制" class="headerlink" title="二、事务协调机制"></a>二、事务协调机制</h3><ul>
+<li><p>TX-LCN框架通过方法上配置的事务注解信息来获取当前事务类型，封装事务参数，执行业务代码，清理线程变量等等。具体的事务执行流程则交由DTXServiceExecutor.transationRunning处理，再其内部再根据事务类型和发起方的不同进行不同的处理。</p>
+<p>transationRunning中保存事务执行日志、处理事务：执行业务前、执行业务、执行业务后、最后finally。</p>
+<p>根据封装的事务参数获取DTXLocalControl顺序调用preBusinessCode、doBusinessCode、onBusinessCodeSuccess or onBusinessCodeError、postBusinessCode。事务发起方的preBusinessCode通过netty调用TxManager创建事务组，参与方则在onBusinessCodeSuccess中加入事务组。</p>
+<p>参与方加入事务组后会创建一个延迟线程检测DTX事务状态，通过TxManager查询txException的信息来获取最终的state，同时也可以等待netty通知得到state信息。当超时没有得到通知时才会通过延迟线程得到state，得到通知后会清除对应的延迟线程。最后通过state提交或者回滚事务。</p>
+<p>在整个业务代码执行完毕之后，发起方调用postBusinessCode方法，通知事务组最后的执行状态，TxManager服务端获取事务组的状态，并下发事务状态通知到各个模块（通过netty进行发送），并返回最终的state给发起方，发起方再根据state提交或者回滚事务并清理本地事务。</p>
+</li>
+<li><p>DTXLocalContext\TracingContext\TCGlobalContext 共同管理当前线程下事务的一些信息。包括groupId、unitId、txContext等等关键信息</p>
+</li>
+<li><p>在一个DTX下每个模块中都有且只有一个全局上下文TxContext，当不存在时会进行创建：</p>
+<p>如果一个调用链是这样的A-&gt;B-&gt;C 三个都是不同的模块则会为每个模块都构造新的TxContext，保证一个模块一个。</p>
+<p>如果三个是两个模块，即A是一个模块，B和C是一个模块根据调用链的情况肯定是C的用B的TxContext。</p>
+</li>
+<li><p>多个模块事务发起和参与关系通过Tracings来协调，对RPC请求传递Header信息，内容为groupId和appMap，模块在后续处理中通过获取全局上下文获取是否拥有groupId来判断是否是参与方</p>
+</li>
 </ul>
-
+<h2 id="业务模块A、B、C"><a href="#业务模块A、B、C" class="headerlink" title="业务模块A、B、C"></a>业务模块A、B、C</h2><h4 id="正常提交"><a href="#正常提交" class="headerlink" title="正常提交"></a>正常提交</h4><p>当业务全部正常提交时，A最后调用postBusinessCode，告知TxManager通知事务组最后状态，服务端会对B\C发起通知提交事务。</p>
+<h4 id="异常回滚"><a href="#异常回滚" class="headerlink" title="异常回滚"></a>异常回滚</h4><ol>
+<li>当A B C 中 C业务异常会直接抛出到B 同时B 抛出到A，最后B、C中直接本地回滚，A得到后也直接回滚，此时并没有任何参与方加入到事务组中，发送的通知也没有作用，因为仅仅成功后调用onBusinessCodeSuccess的才会加入到事务组中去。</li>
+<li>当出现异常而A没有成功告知服务端，则会记录txException? 然后B\C通过延迟检测线程获取最后的事务状态</li>
+</ol>
+<h2 id="TODO-详细的异常处理"><a href="#TODO-详细的异常处理" class="headerlink" title="TODO 详细的异常处理"></a>TODO 详细的异常处理</h2>
       
     </div>
     <div class="article-footer">
@@ -405,7 +430,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://tonyjiangwj.github.io/2018/08/09/常用命令小计/" title="常用命令小计" target="_blank" rel="external">https://tonyjiangwj.github.io/2018/08/09/常用命令小计/</a>
+      <a href="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/" title="分布式事务TX-LCN原理分析" target="_blank" rel="external">https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -454,12 +479,12 @@
   <ul class="pager pull-left">
     
     <li class="prev">
-      <a href="/2018/08/13/tar压缩解压缩命令详解/" title="tar压缩解压缩命令详解"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+      <a href="/2019/11/01/使用Protobuf实现跨语言序列化和反序列化，Java-Python实例/" title="使用Protobuf实现跨语言序列化和反序列化，Java&amp;Python实例"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
     </li>
     
     
     <li class="next">
-      <a href="/2018/08/02/记录几个和Safari有关的坑/" title="记录几个和Safari有关的坑"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2018/10/31/记一次SQL查询优化/" title="记一次SQL查询优化"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
