@@ -26,13 +26,13 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="分布式事务框架 TX-LCN原理分析分布式事务的多种形式 XA 基于数据库实现，对数据库是否支持依赖较重。 TCC 主要基于业务代码控制，分为try/commit/cancel三阶段。业务侵入强，开发和维护难度大。 TXC 基于对SQL的分析，保存SQL执行所影响到的数据快照，在失败后进行回滚。业务侵入低，对SQL兼容要求高，部分SQL不支持。 LCN 通过代理数据库连接对事务进行控制。通过静态代">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/assets/abc.png">
-<meta property="og:image" content="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/assets/yuanli.png">
-<meta property="og:updated_time" content="2019-11-01T05:51:47.142Z">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/abc.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/yuanli.png">
+<meta property="og:updated_time" content="2021-01-07T06:15:38.605Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式事务TX-LCN原理分析">
 <meta name="twitter:description" content="分布式事务框架 TX-LCN原理分析分布式事务的多种形式 XA 基于数据库实现，对数据库是否支持依赖较重。 TCC 主要基于业务代码控制，分为try/commit/cancel三阶段。业务侵入强，开发和维护难度大。 TXC 基于对SQL的分析，保存SQL执行所影响到的数据快照，在失败后进行回滚。业务侵入低，对SQL兼容要求高，部分SQL不支持。 LCN 通过代理数据库连接对事务进行控制。通过静态代">
-<meta name="twitter:image" content="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/assets/abc.png">
+<meta name="twitter:image" content="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/abc.png">
   <!-- Canonical links -->
   <link rel="canonical" href="https://tonyjiangwj.github.io/2019/10/17/分布式事务TX-LCN原理分析/index.html">
   
@@ -200,7 +200,7 @@
   <div class="widget">
     <h3 class="widget-title">标签</h3>
     <div class="widget-body">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端/">后端</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本命令/">脚本命令</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/表单验证/">表单验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/表格/">表格</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端/">后端</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/脚本命令/">脚本命令</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/表单验证/">表单验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/表格/">表格</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -210,7 +210,7 @@
   <div class="widget">
     <h3 class="widget-title">标签云</h3>
     <div class="widget-body tagcloud">
-      <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/hexo/" style="font-size: 13px;">hexo</a> <a href="/tags/jQuery/" style="font-size: 13px;">jQuery</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/shell/" style="font-size: 13px;">shell</a> <a href="/tags/后端/" style="font-size: 14px;">后端</a> <a href="/tags/脚本命令/" style="font-size: 14px;">脚本命令</a> <a href="/tags/表单验证/" style="font-size: 13px;">表单验证</a> <a href="/tags/表格/" style="font-size: 13px;">表格</a>
+      <a href="/tags/Android/" style="font-size: 13px;">Android</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/hexo/" style="font-size: 13px;">hexo</a> <a href="/tags/jQuery/" style="font-size: 13px;">jQuery</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/shell/" style="font-size: 13px;">shell</a> <a href="/tags/后端/" style="font-size: 13.5px;">后端</a> <a href="/tags/脚本命令/" style="font-size: 13.5px;">脚本命令</a> <a href="/tags/表单验证/" style="font-size: 13px;">表单验证</a> <a href="/tags/表格/" style="font-size: 13px;">表格</a>
     </div>
   </div>
 
@@ -219,7 +219,7 @@
   <div class="widget">
     <h3 class="widget-title">归档</h3>
     <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -231,6 +231,21 @@
     <div class="widget-body">
       <ul class="recent-post-list list-unstyled no-thumbnail">
         
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/01/07/将opencv-android-sdk打包成aar文件/" class="title">将opencv-android-sdk打包成aar文件</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-07T02:11:34.000Z" itemprop="datePublished">2021-01-07</time>
+              </p>
+            </div>
+          </li>
+          
           <li>
             
             <div class="item-inner">
@@ -287,21 +302,6 @@
               </p>
               <p class="item-date">
                 <time datetime="2018-10-31T12:09:58.000Z" itemprop="datePublished">2018-10-31</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/脚本命令/">脚本命令</a>
-              </p>
-              <p class="item-title">
-                <a href="/2018/08/13/tar压缩解压缩命令详解/" class="title">tar压缩解压缩命令详解</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2018-08-13T02:20:06.000Z" itemprop="datePublished">2018-08-13</time>
               </p>
             </div>
           </li>
@@ -378,13 +378,13 @@
 <li>LCN名字来源：锁定事务单元（Lock）、确认事务模块状态（Confirm）、通知事务（Notify）</li>
 <li>TX-LCN是一款事务协调框架，其本身不操作事务，而是基于对事务的协调从而达到事务一致性的效果。</li>
 <li>在一个分布式系统下存在多个模块，需要协调完成一次业务，那就存在一次业务事务下可能横跨多种数据源节点的可能。TX-LCN可以解决这样的问题：存在服务模块A、B、C。A模块是MySQL为数据源的服务，B模块是基于Redis为数据源的服务，C模块是基于MongoDB为数据源的服务。若要解决他们的事务一致性就需要针对不同的节点采用不同的方案，并同意协调完成分布式事务的处理。</li>
-<li><p><img src="./assets/abc.png" alt="img"></p>
+<li><p><img src="./abc.png" alt="img"></p>
 </li>
 <li><p>方案：采用TX-LCN分布式事务框架，则可以将模块A使用LCN模式，B、C采用TCC模式完美解决。</p>
 </li>
 <li><p>TX-LCN主要分为Tx-Client和Tx-Manager两个模块，TC作为微服务下的依赖，是事务的发起方。TM是独立的服务，是事务的控制方，用于协调事务。</p>
 </li>
-<li><p><img src="./assets/yuanli.png" alt="img"></p>
+<li><p><img src="./yuanli.png" alt="img"></p>
 </li>
 <li><p>核心步骤如下：</p>
 <ul>
