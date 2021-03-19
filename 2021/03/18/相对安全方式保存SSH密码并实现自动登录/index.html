@@ -26,7 +26,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="背景Linux或者Mac上一般都是直接用的终端来连接SSH，基本上很少有类似Windows上用XShell之类的客户端。所以在终端上直接登录都必须输入密码，但是如果密码比较复杂就更难记住了。这时候可以通过SSH-Key来实现秘钥登录。 SSH-Key登录远程服务器 SSH-Key是一种基于密钥的安全认证，远程服务器持有公钥，本地持有私钥，在客户端向服务器发送请求之后，服务端在用户主目录下查找用户的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-03-18T16:04:31.793Z">
+<meta property="og:updated_time" content="2021-03-19T01:32:24.721Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="相对安全方式保存SSH密码并实现自动登录">
 <meta name="twitter:description" content="背景Linux或者Mac上一般都是直接用的终端来连接SSH，基本上很少有类似Windows上用XShell之类的客户端。所以在终端上直接登录都必须输入密码，但是如果密码比较复杂就更难记住了。这时候可以通过SSH-Key来实现秘钥登录。 SSH-Key登录远程服务器 SSH-Key是一种基于密钥的安全认证，远程服务器持有公钥，本地持有私钥，在客户端向服务器发送请求之后，服务端在用户主目录下查找用户的">
@@ -355,7 +355,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/03/18/相对安全方式保存SSH密码并实现自动登录/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,253(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,255(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
@@ -440,7 +440,7 @@
 </li>
 <li><p>比如 ssh_my_server.sh</p>
 </li>
-<li><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source ./func.sh ## 用于加载预定义的方法</span><br><span class="line">ssh_target $&#123;用户名&#125; $&#123;服务器host&#125; $&#123;端口&#125;</span><br></pre></td></tr></table></figure>
+<li><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source ./func.sh ## 用于加载预定义的方法</span><br><span class="line">ssh_target $&#123;hist&#125;.pass $&#123;用户名&#125; $&#123;服务器host&#125; $&#123;端口&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>然后对以上两个文件赋予可执行权限</p>
 </li>
