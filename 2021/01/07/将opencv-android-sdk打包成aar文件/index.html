@@ -25,23 +25,23 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="本文介绍的是如何将opencv-android-sdk打包成aar文件，以便作为lib包导入到现有项目中第一步、下载opencv-android-sdk 前往opencv官网https:&#x2F;&#x2F;opencv.org&#x2F;releases&#x2F; 下载对应版本的Android-sdk.zip，然后解压备用。 这里不管是4.x还是3.x都可以，后续步骤是一样的  第二步、创建一个空的项目 打开Android Stu">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://tonyjiangwj.github.io/image-20210107105812677.png">
-<meta property="og:image" content="https://tonyjiangwj.github.io/image-20210107110114611.png">
-<meta property="og:image" content="https://tonyjiangwj.github.io/image-20210107110305985.png">
-<meta property="og:image" content="https://tonyjiangwj.github.io/image-20210107110526376.png">
-<meta property="og:image" content="https://tonyjiangwj.github.io/image-20210107111122256.png">
-<meta property="og:image" content="https://tonyjiangwj.github.io/image-20210107112737237.png">
-<meta property="og:image" content="https://tonyjiangwj.github.io/image-20210107112320456.png">
-<meta property="og:image" content="https://tonyjiangwj.github.io/image-20210107112429830.png">
-<meta property="og:image" content="https://tonyjiangwj.github.io/image-20210107113350607.png">
-<meta property="og:image" content="https://tonyjiangwj.github.io/image-20210107114148997.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107105812677.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107110114611.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107110305985.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107110526376.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107111122256.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107112737237.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107112320456.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107112429830.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107113350607.png">
+<meta property="og:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107114148997.png">
 <meta property="article:published_time" content="2021-01-07T02:11:34.000Z">
-<meta property="article:modified_time" content="2023-09-09T02:37:32.403Z">
+<meta property="article:modified_time" content="2023-09-09T07:34:08.594Z">
 <meta property="article:author" content="TonyJiang">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Android">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tonyjiangwj.github.io/image-20210107105812677.png">
+<meta name="twitter:image" content="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107105812677.png">
   <!-- Canonical links -->
   <link rel="canonical" href="https://tonyjiangwj.github.io/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/index.html">
   
@@ -212,7 +212,7 @@
   <div class="widget">
     <h3 class="widget-title">标签</h3>
     <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" rel="tag">脚本命令</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" rel="tag">表单验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E6%A0%BC/" rel="tag">表格</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" rel="tag">脚本命令</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" rel="tag">表单验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E6%A0%BC/" rel="tag">表格</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -222,7 +222,7 @@
   <div class="widget">
     <h3 class="widget-title">标签云</h3>
     <div class="widget-body tagcloud">
-      <a href="/tags/Android/" style="font-size: 13px;">Android</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Shell/" style="font-size: 14px;">Shell</a> <a href="/tags/hexo/" style="font-size: 13px;">hexo</a> <a href="/tags/jQuery/" style="font-size: 13px;">jQuery</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 13.5px;">后端</a> <a href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" style="font-size: 13.5px;">脚本命令</a> <a href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">表单验证</a> <a href="/tags/%E8%A1%A8%E6%A0%BC/" style="font-size: 13px;">表格</a>
+      <a href="/tags/Android/" style="font-size: 13px;">Android</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Shell/" style="font-size: 14px;">Shell</a> <a href="/tags/hexo/" style="font-size: 13.5px;">hexo</a> <a href="/tags/jQuery/" style="font-size: 13px;">jQuery</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 13.5px;">后端</a> <a href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" style="font-size: 13.5px;">脚本命令</a> <a href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">表单验证</a> <a href="/tags/%E8%A1%A8%E6%A0%BC/" style="font-size: 13px;">表格</a>
     </div>
   </div>
 
@@ -231,7 +231,7 @@
   <div class="widget">
     <h3 class="widget-title">归档</h3>
     <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -243,6 +243,21 @@
     <div class="widget-body">
       <ul class="recent-post-list list-unstyled no-thumbnail">
         
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/09/%E5%88%9B%E5%BB%BA%E6%8F%92%E4%BB%B6%E5%A4%84%E7%90%86hexo%E5%9B%BE%E7%89%87/" class="title">创建插件处理hexo图片</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-09T08:04:57.000Z" itemprop="datePublished">2023-09-09</time>
+              </p>
+            </div>
+          </li>
+          
           <li>
             
             <div class="item-inner">
@@ -299,21 +314,6 @@
               </p>
               <p class="item-date">
                 <time datetime="2020-07-21T12:08:39.000Z" itemprop="datePublished">2020-07-21</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                
-              </p>
-              <p class="item-title">
-                <a href="/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/" class="title">使用Protobuf实现跨语言序列化和反序列化，Java&amp;Python实例</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2019-11-01T05:46:27.000Z" itemprop="datePublished">2019-11-01</time>
               </p>
             </div>
           </li>
@@ -387,25 +387,25 @@
 <h4 id="第二步、创建一个空的项目"><a href="#第二步、创建一个空的项目" class="headerlink" title="第二步、创建一个空的项目"></a>第二步、创建一个空的项目</h4><ul>
 <li><p>打开Android Studio，create new project 随便选一个Empty Activity然后第二页随便写名称，minimun sdk选择21以上即可</p>
 </li>
-<li><p><img src="/./image-20210107105812677.png" alt="image-20210107105812677"></p>
+<li><p><img src="/./2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107105812677.png" alt="image-20210107105812677"></p>
 </li>
 <li><p>创建完毕之后，通过菜单new module, 选择Android Library</p>
 </li>
-<li><p><img src="/./image-20210107110114611.png" alt="image-20210107110114611"></p>
+<li><p><img src="/./2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107110114611.png" alt="image-20210107110114611"></p>
 </li>
 <li><p>填写Android Library信息，同样选择Mininum SDK为21以上，其他的可以随便写，我这里包名写成org.opencv</p>
 </li>
-<li><p><img src="/./image-20210107110305985.png" alt="image-20210107110305985"></p>
+<li><p><img src="/./2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107110305985.png" alt="image-20210107110305985"></p>
 </li>
 <li><p>右键opencv模块，创建AIDL文件夹</p>
 </li>
-<li><p><img src="/./image-20210107110526376.png" alt="image-20210107110526376"></p>
+<li><p><img src="/./2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107110526376.png" alt="image-20210107110526376"></p>
 </li>
 </ul>
 <h4 id="第三步、复制SDK源代码到项目中"><a href="#第三步、复制SDK源代码到项目中" class="headerlink" title="第三步、复制SDK源代码到项目中"></a>第三步、复制SDK源代码到项目中</h4><ul>
 <li><p>为了方便查看目录结构，切换为Project</p>
 </li>
-<li><p><img src="/./image-20210107111122256.png" alt="image-20210107111122256"></p>
+<li><p><img src="/./2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107111122256.png" alt="image-20210107111122256"></p>
 </li>
 <li><p>将 <code>[opencv-sdk-dir]/sdk/java/src/org/opencv/engine/OpenCVEngineInterface.aidl</code> 文件复制到 <code>[opencv-module]/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl</code> </p>
 </li>
@@ -417,25 +417,25 @@
 </li>
 <li><p>完成后的目录如下</p>
 </li>
-<li><p><img src="/./image-20210107112737237.png" alt="image-20210107112737237"></p>
+<li><p><img src="/./2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107112737237.png" alt="image-20210107112737237"></p>
 </li>
 <li><p>然后修改[opencv-module]&#x2F;build.gradle 增加lintOptions 避免lint报错打断打包进程</p>
 </li>
-<li><p><img src="/./image-20210107112320456.png" alt="image-20210107112320456"></p>
+<li><p><img src="/./2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107112320456.png" alt="image-20210107112320456"></p>
 </li>
 </ul>
 <h4 id="第四步、打包aar文件"><a href="#第四步、打包aar文件" class="headerlink" title="第四步、打包aar文件"></a>第四步、打包aar文件</h4><ul>
 <li><p>运行 gradle task build，双击build即可</p>
 </li>
-<li><p><img src="/./image-20210107112429830.png" alt="image-20210107112429830"></p>
+<li><p><img src="/./2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107112429830.png" alt="image-20210107112429830"></p>
 </li>
 <li><p>打包完成后aar文件在 <code>[opencv-module]/build/outputs/aar/</code> 目录下，本教程直接跳过了jniLibs，打包体积在几百kB左右</p>
 </li>
-<li><p><img src="/./image-20210107113350607.png" alt="image-20210107113350607"></p>
+<li><p><img src="/./2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107113350607.png" alt="image-20210107113350607"></p>
 </li>
 <li><p>如果需要将jniLibs一起打包，可能需要在build.gradle中配置ndk.version为本地已安装的版本 否则可能报错</p>
 </li>
-<li><p><img src="/./image-20210107114148997.png" alt="image-20210107114148997"></p>
+<li><p><img src="/./2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/image-20210107114148997.png" alt="image-20210107114148997"></p>
 </li>
 <li><p>这样打包后的aar文件大概有十几MB</p>
 </li>
