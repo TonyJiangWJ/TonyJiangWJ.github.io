@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>相对安全方式保存SSH密码并实现自动登录 | TonyJiangWJ的个人博客</title>
+  <meta name="description" content="背景Linux或者Mac上一般都是直接用的终端来连接SSH，基本上很少有类似Windows上用XShell之类的客户端。所以在终端上直接登录都必须输入密码，但是如果密码比较复杂就更难记住了。这时候可以通过SSH-Key来实现秘钥登录。 SSH-Key登录远程服务器 SSH-Key是一种基于密钥的安全认证，远程服务器持有公钥，本地持有私钥，在客户端向服务器发送请求之后，服务端在用户主目录下查找用户的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="相对安全方式保存SSH密码并实现自动登录">
+<meta property="og:url" content="https://tonyjiangwj.github.io/2021/03/18/%E7%9B%B8%E5%AF%B9%E5%AE%89%E5%85%A8%E6%96%B9%E5%BC%8F%E4%BF%9D%E5%AD%98SSH%E5%AF%86%E7%A0%81%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景Linux或者Mac上一般都是直接用的终端来连接SSH，基本上很少有类似Windows上用XShell之类的客户端。所以在终端上直接登录都必须输入密码，但是如果密码比较复杂就更难记住了。这时候可以通过SSH-Key来实现秘钥登录。 SSH-Key登录远程服务器 SSH-Key是一种基于密钥的安全认证，远程服务器持有公钥，本地持有私钥，在客户端向服务器发送请求之后，服务端在用户主目录下查找用户的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-18T12:34:52.000Z">
+<meta property="article:modified_time" content="2023-09-09T02:37:32.416Z">
+<meta property="article:author" content="TonyJiang">
+<meta property="article:tag" content="Shell">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://tonyjiangwj.github.io/2021/03/18/%E7%9B%B8%E5%AF%B9%E5%AE%89%E5%85%A8%E6%96%B9%E5%BC%8F%E4%BF%9D%E5%AD%98SSH%E5%AF%86%E7%A0%81%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/index.html">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/tonyjiangwj" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">TonyJiangWJ</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Backend &amp; Rookie Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Hangzhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/tonyjiangwj" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/">脚本命令</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" rel="tag">脚本命令</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" rel="tag">表单验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E6%A0%BC/" rel="tag">表格</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Android/" style="font-size: 13px;">Android</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Shell/" style="font-size: 14px;">Shell</a> <a href="/tags/hexo/" style="font-size: 13px;">hexo</a> <a href="/tags/jQuery/" style="font-size: 13px;">jQuery</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 13.5px;">后端</a> <a href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" style="font-size: 13.5px;">脚本命令</a> <a href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">表单验证</a> <a href="/tags/%E8%A1%A8%E6%A0%BC/" style="font-size: 13px;">表格</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/09/%E5%AE%89%E8%A3%85PowerShell7%E5%B9%B6%E9%85%8D%E7%BD%AEohmyposh/" class="title">安装PowerShell7并配置ohmyposh</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-09T06:13:50.000Z" itemprop="datePublished">2023-09-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/18/%E7%9B%B8%E5%AF%B9%E5%AE%89%E5%85%A8%E6%96%B9%E5%BC%8F%E4%BF%9D%E5%AD%98SSH%E5%AF%86%E7%A0%81%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/" class="title">相对安全方式保存SSH密码并实现自动登录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-18T12:34:52.000Z" itemprop="datePublished">2021-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/" class="title">将opencv-android-sdk打包成aar文件</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-07T02:11:34.000Z" itemprop="datePublished">2021-01-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/21/%E8%87%AA%E5%BB%BAkms%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E9%80%9A%E8%BF%87docker%E9%83%A8%E7%BD%B2/" class="title">自建kms服务器并通过docker部署</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-21T12:08:39.000Z" itemprop="datePublished">2020-07-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/" class="title">使用Protobuf实现跨语言序列化和反序列化，Java&amp;Python实例</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-11-01T05:46:27.000Z" itemprop="datePublished">2019-11-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-相对安全方式保存SSH密码并实现自动登录" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      相对安全方式保存SSH密码并实现自动登录
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/03/18/%E7%9B%B8%E5%AF%B9%E5%AE%89%E5%85%A8%E6%96%B9%E5%BC%8F%E4%BF%9D%E5%AD%98SSH%E5%AF%86%E7%A0%81%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/" class="article-date">
+	  <time datetime="2021-03-18T12:34:52.000Z" itemprop="datePublished">2021-03-18</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Shell/" rel="tag">Shell</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/03/18/%E7%9B%B8%E5%AF%B9%E5%AE%89%E5%85%A8%E6%96%B9%E5%BC%8F%E4%BF%9D%E5%AD%98SSH%E5%AF%86%E7%A0%81%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.3k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>Linux或者Mac上一般都是直接用的终端来连接SSH，基本上很少有类似Windows上用XShell之类的客户端。所以在终端上直接登录都必须输入密码，但是如果密码比较复杂就更难记住了。这时候可以通过SSH-Key来实现秘钥登录。</p>
+<h3 id="SSH-Key登录远程服务器"><a href="#SSH-Key登录远程服务器" class="headerlink" title="SSH-Key登录远程服务器"></a>SSH-Key登录远程服务器</h3><ul>
+<li><p>SSH-Key是一种基于密钥的安全认证，远程服务器持有公钥，本地持有私钥，在客户端向服务器发送请求之后，服务端在用户主目录下查找用户的公钥，然后对比用户发送过来的公钥，如果一致则用公钥加密”质询“并发送给客户端。客户端收到”质询“后用私钥解密，在发送给服务端，认证结束。</p>
+</li>
+<li><p>要实现这种方式的登录首先需要创建ssh-key：</p>
+</li>
+<li><pre><code class="shell">ssh-keygen -t rsa
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">- 在交互界面中可以按默认的直接回车，最后会在`$&#123;USER_HOME&#125;/.ssh/`下保存公钥和私钥文件：`id_rsa` `id_rsa.pub`</span><br><span class="line"></span><br><span class="line">- 然后需要将公钥保存到服务器上，执行以下命令即可将公钥发送到服务器上，需要输入登录密码</span><br><span class="line"></span><br><span class="line">- ```shell</span><br><span class="line">  ssh-copy-id -i ~/.ssh/id_rsa.pub $&#123;user&#125;@$&#123;host&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>以上命令会将公钥文件保存到服务器用户目录下的 <code>.ssh/authorized_keys</code> 中</p>
+</li>
+<li><p>配置完成之后便可以直接免密码登录了 <code>ssh $&#123;user&#125;@$&#123;host&#125;</code></p>
+</li>
+</ul>
+<h4 id="其他扩展配置"><a href="#其他扩展配置" class="headerlink" title="其他扩展配置"></a>其他扩展配置</h4><ul>
+<li><p>有时候可能会需要创建多个不同的秘钥对，用于不同的服务器登陆，或者用于Github的免密操作</p>
+</li>
+<li><p>通过ssh-keygen创建新的文件，此时直接定义新的名字，比如：</p>
+</li>
+<li><pre><code class="shell">ssh-keygen -t rsa -C &#39;另一个服务器&#39; -f ~/.ssh/my_id_rsa
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 然后同样的将公钥发送到需要登录的服务器</span><br><span class="line"></span><br><span class="line">- ```shell</span><br><span class="line">  ssh-copy-id -i ~/.ssh/my_id_rsa $&#123;user&#125;@$&#123;host&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>再在登录的时候指定私钥文件，或者通过 <code>~/.ssh/config</code> 自动带上指定的文件</p>
+<ul>
+<li><p>直接指定的方式：<code> ssh $&#123;user&#125;@$&#123;host&#125; -i ~/.ssh/my_id_rsa</code></p>
+</li>
+<li><p>通过配置文件的方式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">~/.ssh/config</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定某一服务器所使用的私钥文件</span></span><br><span class="line">Host serverAlias # 服务器的别名，可以随便起一个 或者直接按ip也可以</span><br><span class="line">HostName $&#123;服务器的ip&#125;</span><br><span class="line">User $&#123;user&#125; # 指定登录用户名</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">IdentityFile ~/.ssh/my_id_rsa # 指定私钥文件</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="另一种情况"><a href="#另一种情况" class="headerlink" title="另一种情况"></a>另一种情况</h3><ul>
+<li>但是也有些情况下，无法将本地的公钥发送到服务器上，比如登录客户的服务器，或者登录一个IP或者端口可能会变化的服务器，比如我使用了免费的内网穿透来连接我的树莓派，它的端口就会经常变化。</li>
+<li>在这种情况下，登录的时候都得去手动输入密码了。当用户名或者密码很难记住的时候，往往会特别需要一个能够记住用户名密码的客户端。Mac下免费的客户端较少，比如Termius就是一个不错的客户端，但是不知为何它有时候会卡死。所以我选择了自己实现记住密码的方式，可以在登录时只记住一个密码，将不同服务器的密码通过加密保存，登录的时候通过输入解密秘钥来自动解密登录。</li>
+</ul>
+<h3 id="通过加密文件保存服务器密码实现自动登录"><a href="#通过加密文件保存服务器密码实现自动登录" class="headerlink" title="通过加密文件保存服务器密码实现自动登录"></a>通过加密文件保存服务器密码实现自动登录</h3><ul>
+<li><p>通过该方式需要依赖的工具如下：<code>openssl</code> <code>expect</code>, 一般情况下 openssl都是自带了的，往往只需要安装一下expect</p>
+</li>
+<li><p>Mac下可以直接 <code> brew install expect</code></p>
+</li>
+<li><p>Ubuntu 下可以通过apt安装 <code>sudo apt install expect</code></p>
+</li>
+<li><p>expect 是一种交互式的开源工具，用于实现自动化的功能</p>
+</li>
+</ul>
+<h4 id="第一步创建加密方法，保存密码的密文"><a href="#第一步创建加密方法，保存密码的密文" class="headerlink" title="第一步创建加密方法，保存密码的密文"></a>第一步创建加密方法，保存密码的密文</h4><ul>
+<li><p>创建一个func.sh文件，内容如下</p>
+</li>
+<li><pre><code class="shell">#!/bin/bash
+## 加密方法
+encrypt() &#123;
+    local content=$1
+    local pass=$2
+    cmd=&quot;echo $content | openssl enc -aes-256-cfb -a -e -pass pass:$pass -iter 12 -nosalt&quot;
+    echo $content | openssl enc -aes-256-cfb -a -e -pass pass:$pass -iter 12 -nosalt
+&#125;
+## 加密工具方法
+create_encrypted_pass() &#123;
+    read -s -p &quot;Enter origin password:&quot; content
+    echo &#39;&#39;
+    read -s -p &quot;Enter aes password:&quot; pass
+    echo &#39;&#39;
+    encrypt $content $pass
+&#125;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 然后在终端中 `source func.sh` 加载方法，然后调用 `create_encrypted_pass` 在交互界面中输入密码和加密秘钥，加密秘钥需要牢记于心，以后登录时只需要输入它即可</span><br><span class="line"></span><br><span class="line">- 完成后会打印加密后的密文，将密文保存下来，比如保存到`$&#123;host&#125;.pass` </span><br><span class="line"></span><br><span class="line">#### 第二步创建解密方法，和自动登录的方法</span><br><span class="line"></span><br><span class="line">- 在func.sh中补充解密和登录方法</span><br><span class="line"></span><br><span class="line">- ```shell</span><br><span class="line">  </span><br><span class="line">  ## 解密方法</span><br><span class="line">  decrypt() &#123;</span><br><span class="line">      local encrypted=$1</span><br><span class="line">      local pass=$2</span><br><span class="line">      echo $encrypted | openssl enc -aes-256-cfb -a -d -pass pass:$pass -iter 12 -nosalt</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  ## 登录方法，输入参数有 加密文件路径，用户名，服务器host，（端口，解密秘钥【这两个可选】）</span><br><span class="line">  ssh_target() &#123;</span><br><span class="line">      local pass_path=$1</span><br><span class="line">      local user=$2</span><br><span class="line">      local host=$3</span><br><span class="line">      local port=$4</span><br><span class="line">      local aes_pass=$5</span><br><span class="line">      if [ &quot;$port&quot; == &quot;&quot; ]; then</span><br><span class="line">        port=22</span><br><span class="line">      fi</span><br><span class="line">      encrypted=`cat $pass_path`</span><br><span class="line">      pass=`decrypt $encrypted $aes_pass`</span><br><span class="line">      # echo &quot;decrypted pass is $&#123;pass&#125;&quot;</span><br><span class="line">      ./_ssh.exp $host $user $pass $port</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>然后创建自动执行脚本，_ssh.exp，用于根据输入参数自动登录到服务器上</p>
+</li>
+<li><pre><code class="shell">#!/usr/bin/expect
+## 读取参数
+set host [lindex $argv 0]
+set user [lindex $argv 1]
+set password [lindex $argv 2]
+set port [lindex $argv 3]
+set timeout 3000
+spawn ssh -l $user $host -p $port
+expect &#123;
+  # 判断是否有记住hosts的交互信息
+  &quot;(yes/no?&quot; &#123;
+    send &quot;yes\r&quot; # 发送yes
+    expect &#123;
+      &quot;password:&quot; &#123; send &quot;$&#123;password&#125;\r&quot; &#125; # 发送密码
+    &#125;
+  &#125;
+  &quot;password:&quot; &#123; send &quot;$&#123;password&#125;\r&quot; &#125; # 发送密码
+&#125;
+interact
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 然后只需要在创建一个针对某一服务器的登录脚本，在里面配置一些信息</span><br><span class="line"></span><br><span class="line">- 比如 ssh_my_server.sh</span><br><span class="line"></span><br><span class="line">- ```shell</span><br><span class="line">  source ./func.sh ## 用于加载预定义的方法</span><br><span class="line">  ssh_target $&#123;hist&#125;.pass $&#123;用户名&#125; $&#123;服务器host&#125; $&#123;端口&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>然后对以上两个文件赋予可执行权限</p>
+</li>
+<li><p><code>chmod a+x ssh_my_server.sh _ssh.exp</code></p>
+</li>
+</ul>
+<h4 id="第三步，登录服务器"><a href="#第三步，登录服务器" class="headerlink" title="第三步，登录服务器"></a>第三步，登录服务器</h4><ul>
+<li>此时要登录到服务器时，只需要执行 ssh_my_server.sh 即可</li>
+<li><code>./ssh_my_server.sh</code> 然后根据提示输入加密秘钥，这个秘钥牢记于心即可。一般不知道秘钥无法解密出具体的登录密码，所以是比较安全的，在脚本中也不会暴露密码信息。</li>
+</ul>
+<h4 id="额外实现"><a href="#额外实现" class="headerlink" title="额外实现"></a>额外实现</h4><ul>
+<li><p>以上方式，每次执行 <code>./ssh_my_server.sh</code> 都需要输入一遍密码，有时候又觉得有些麻烦。可以稍微再改造一下，在当前终端中不再需要输入密码。实现方式是得到和终端相关的数据，用它作为加密密钥，将记在心里的那个秘钥保存下来。</p>
+</li>
+<li><p>在func.sh中增加有些方法，并修改ssh_target</p>
+</li>
+<li><pre><code class="shell">## 根据终端的信息创建临时秘钥，该方法创建的秘钥只要在当前终端执行，得到的都是同样的内容
+create_temp_pass() &#123;
+    local tty_info=`tty`
+    tty_info=$&#123;tty_info#/dev/*&#125;
+    local ps_info=`ps -ef | grep $tty_info | awk &#39;NR==1&#123;print $2,$3,$5,$6&#125;&#39;`
+    local aes_pass=`echo $ps_info | md5`
+    echo $aes_pass
+&#125;
+## 从加密文件中解密出明文密码
+get_session_aes_pass() &#123;
+    local work_dir=`pwd`
+    local temp_pass_dir=&quot;$work_dir/.pass&quot;
+    local aes_pass=&#39;&#39;
+    # 判断是否存在加密文件，不存在则返回空内容
+    if test -e $temp_pass_dir ; then
+        local encrypted_aes_pass=`cat $temp_pass_dir`
+        local temp_aes_pass=`create_temp_pass`
+        # 判断密文解密的合法性，我在明文中加入了_123后缀，只有后缀匹配才能确定解密是成功的，否则解密失败返回空内容
+        local decrypted_aes_pass=`decrypt $encrypted_aes_pass $temp_aes_pass`
+        if [ &quot;$&#123;decrypted_aes_pass#*_&#125;&quot; == &quot;123&quot; ]; then
+            aes_pass=$&#123;decrypted_aes_pass%_123&#125;
+        fi
+    fi
+    echo $aes_pass
+&#125;
+## 将明文密码保存到加密文件中
+save_session_aes_pass() &#123;
+    local work_dir=`pwd`
+    local temp_pass_dir=&quot;$work_dir/.pass&quot;
+    local aes_pass=$1
+    local temp_aes_pass=`create_temp_pass`
+    # 在明文中加入_123后缀，然后加密到加密文件中
+    local encrypted_aes_pass=`encrypt &quot;$&#123;aes_pass&#125;_123&quot; $temp_aes_pass`
+    echo $encrypted_aes_pass &gt; $temp_pass_dir
+&#125;
+
+ssh_target() &#123;
+    local pass_path=$1
+    local user=$2
+    local host=$3
+    local port=$4
+    local aes_pass=$5
+    if [ &quot;$port&quot; == &quot;&quot; ]; then
+      port=22
+    fi
+    encrypted=`cat $pass_path`
+    
+    # 这里增加判断，如果传入的解密密码为空，
+    if [ &quot;$aes_pass&quot; == &quot;&quot; ]; then
+        aes_pass=`get_session_aes_pass`
+        # 第二次判断，如果解密出的内容为空，则需要重新输入解密的秘钥
+        if [ &quot;$aes_pass&quot; == &quot;&quot; ]; then
+            read -s -p &#39;please enter aes password:&#39; aes_pass
+            echo &#39;&#39;
+            # 将秘钥明文加密保存
+            `save_session_aes_pass $aes_pass`
+        fi
+    fi
+    pass=`decrypt $encrypted $aes_pass`
+    # echo &quot;decrypted pass is $&#123;pass&#125;&quot;
+    ../libs/_ssh.exp $host $user $pass $port
+&#125;
+</code></pre>
+</li>
+<li><p>然后在同一个终端中，只在第一次执行 <code>ssh_my_server.sh</code> 的时候需要输入密码，在后续的操作中不再需要输入密码。当重新打开一个终端时，才会要求再次输入密码。</p>
+</li>
+<li><p>当需要登录多个不同的服务器时，可以创建多个不同的ssh_my_server.sh文件，顺序分别是先创建登录密码的加密文件，然后在ssh_my_server.sh文件中配置加密文件位置和服务器登录名，host，端口等信息。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://tonyjiangwj.github.io/2021/03/18/%E7%9B%B8%E5%AF%B9%E5%AE%89%E5%85%A8%E6%96%B9%E5%BC%8F%E4%BF%9D%E5%AD%98SSH%E5%AF%86%E7%A0%81%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/" title="相对安全方式保存SSH密码并实现自动登录" target="_blank" rel="external">https://tonyjiangwj.github.io/2021/03/18/%E7%9B%B8%E5%AF%B9%E5%AE%89%E5%85%A8%E6%96%B9%E5%BC%8F%E4%BF%9D%E5%AD%98SSH%E5%AF%86%E7%A0%81%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/tonyjiangwj" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/tonyjiangwj" target="_blank"><span class="text-dark">TonyJiangWJ</span><small class="ml-1x">Backend &amp; Rookie Web Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDMzNi8yMDg2OA==">
+        <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/09/09/%E5%AE%89%E8%A3%85PowerShell7%E5%B9%B6%E9%85%8D%E7%BD%AEohmyposh/" title="安装PowerShell7并配置ohmyposh"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/" title="将opencv-android-sdk打包成aar文件"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/tonyjiangwj" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+<script defer type="text/javascript">
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+
+    if (typeof LivereTower === 'function') { return; }
+
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

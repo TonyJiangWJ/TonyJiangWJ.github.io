@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>常用命令小计 | TonyJiangWJ的个人博客</title>
+  <meta name="description" content="记录工作中用到的一些比较实用的命令，包括Windows和Linux下的。持续更新中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用命令小计">
+<meta property="og:url" content="https://tonyjiangwj.github.io/2018/08/09/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%A1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="记录工作中用到的一些比较实用的命令，包括Windows和Linux下的。持续更新中">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-08-09T07:32:04.000Z">
+<meta property="article:modified_time" content="2023-09-09T06:27:41.959Z">
+<meta property="article:author" content="TonyJiang">
+<meta property="article:tag" content="脚本命令">
+<meta property="article:tag" content="Shell">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://tonyjiangwj.github.io/2018/08/09/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%A1/index.html">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/tonyjiangwj" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">TonyJiangWJ</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Backend &amp; Rookie Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Hangzhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/tonyjiangwj" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/">脚本命令</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" rel="tag">脚本命令</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" rel="tag">表单验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E6%A0%BC/" rel="tag">表格</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Android/" style="font-size: 13px;">Android</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Shell/" style="font-size: 14px;">Shell</a> <a href="/tags/hexo/" style="font-size: 13px;">hexo</a> <a href="/tags/jQuery/" style="font-size: 13px;">jQuery</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 13.5px;">后端</a> <a href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" style="font-size: 13.5px;">脚本命令</a> <a href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">表单验证</a> <a href="/tags/%E8%A1%A8%E6%A0%BC/" style="font-size: 13px;">表格</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/09/%E5%AE%89%E8%A3%85PowerShell7%E5%B9%B6%E9%85%8D%E7%BD%AEohmyposh/" class="title">安装PowerShell7并配置ohmyposh</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-09T06:13:50.000Z" itemprop="datePublished">2023-09-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/18/%E7%9B%B8%E5%AF%B9%E5%AE%89%E5%85%A8%E6%96%B9%E5%BC%8F%E4%BF%9D%E5%AD%98SSH%E5%AF%86%E7%A0%81%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/" class="title">相对安全方式保存SSH密码并实现自动登录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-18T12:34:52.000Z" itemprop="datePublished">2021-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/" class="title">将opencv-android-sdk打包成aar文件</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-07T02:11:34.000Z" itemprop="datePublished">2021-01-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/21/%E8%87%AA%E5%BB%BAkms%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E9%80%9A%E8%BF%87docker%E9%83%A8%E7%BD%B2/" class="title">自建kms服务器并通过docker部署</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-21T12:08:39.000Z" itemprop="datePublished">2020-07-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/" class="title">使用Protobuf实现跨语言序列化和反序列化，Java&amp;Python实例</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-11-01T05:46:27.000Z" itemprop="datePublished">2019-11-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-常用命令小计" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      常用命令小计
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/08/09/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%A1/" class="article-date">
+	  <time datetime="2018-08-09T07:32:04.000Z" itemprop="datePublished">2018-08-09</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Shell/" rel="tag">Shell</a>, <a class="article-tag-link-link" href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" rel="tag">脚本命令</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/08/09/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%A1/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 928(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>记录工作中用到的一些比较实用的命令，包括Windows和Linux下的。持续更新中<span id="more"></span></p>
+<h2 id="Maven命令"><a href="#Maven命令" class="headerlink" title="Maven命令"></a>Maven命令</h2><h3 id="常用基本命令"><a href="#常用基本命令" class="headerlink" title="常用基本命令"></a>常用基本命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">创建maven项目：mvn archetype:create</span><br><span class="line">指定 group： -DgroupId=packageName</span><br><span class="line">指定 artifact：-DartifactId=projectName</span><br><span class="line">创建web项目：-DarchetypeArtifactId=maven-archetype-webapp</span><br><span class="line">创建maven项目：mvn archetype:generate</span><br><span class="line">验证项目是否正确：mvn validate</span><br><span class="line">maven 打包：mvn package</span><br><span class="line">只打jar包：mvn jar:jar</span><br><span class="line">生成源码jar包：mvn <span class="built_in">source</span>:jar</span><br><span class="line">产生应用需要的任何额外的源代码：mvn generate-sources</span><br><span class="line">编译源代码： mvn compile</span><br><span class="line">编译测试代码：mvn test-compile</span><br><span class="line">运行测试：mvn <span class="built_in">test</span></span><br><span class="line">运行检查：mvn verify</span><br><span class="line">清理maven项目：mvn clean</span><br><span class="line">生成eclipse项目：mvn eclipse:eclipse</span><br><span class="line">清理eclipse配置：mvn eclipse:clean</span><br><span class="line">生成idea项目：mvn idea:idea</span><br><span class="line">安装项目到本地仓库：mvn install</span><br><span class="line">发布项目到远程仓库：mvn deploy</span><br><span class="line">在集成测试可以运行的环境中处理和发布包：mvn integration-test</span><br><span class="line">显示maven依赖树：mvn dependency:tree</span><br><span class="line">显示maven依赖列表：mvn dependency:list</span><br><span class="line">分析maven依赖情况：mvn dependency:analyze</span><br><span class="line">下载依赖包的源码：mvn dependency:sources</span><br><span class="line">安装本地jar到本地仓库：mvn install:install-file -DgroupId=packageName -DartifactId=projectName -Dversion=version -Dpackaging=jar -Dfile=path</span><br></pre></td></tr></table></figure>
+
+<p>maven 命令的格式为 mvn [plugin-name]:[goal-name]，可以接受的参数如下，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-D 指定参数，如 -Dmaven.test.skip(=<span class="literal">true</span>可选项) 跳过单元测试；</span><br><span class="line">-P 指定 Profile 配置，可以用于区分环境；</span><br><span class="line">-e 显示maven运行出错的信息；</span><br><span class="line">-o 离线执行命令,即不去远程仓库更新包；</span><br><span class="line">-X 显示maven允许的debug信息；</span><br><span class="line">-U 强制去远程更新snapshot的插件或依赖，默认每天只更新一次。</span><br></pre></td></tr></table></figure>
+<p>maven分析依赖情况，通过该命令可以快速定位依赖情况，然后通过在pom里面添加exclusion排除冲突的依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mvn dependency:tree -Dverbose -Dincludes=groupId:artifactId:version</span><br><span class="line"><span class="comment"># -Dverbose显示详细信息</span></span><br><span class="line"><span class="comment"># -Dincludes指定包含的包，可以用*匹配如-Dincludes=org.apache.*:*</span></span><br><span class="line"><span class="comment"># -Dexcludes排除包，类似于includes</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="web项目相关命令"><a href="#web项目相关命令" class="headerlink" title="web项目相关命令"></a>web项目相关命令</h3><ul>
+<li>启动tomcat：mvn tomcat:run</li>
+<li>启动jetty：mvn jetty:run</li>
+<li>运行打包部署：mvn tomcat:deploy</li>
+<li>撤销部署：mvn tomcat:undeploy</li>
+<li>启动web应用：mvn tomcat:start</li>
+<li>停止web应用：mvn tomcat:stop</li>
+<li>重新部署：mvn tomcat:redeploy</li>
+<li>部署展开的war文件：mvn war:exploded tomcat:exploded</li>
+</ul>
+<h2 id="Linux下自动化脚本"><a href="#Linux下自动化脚本" class="headerlink" title="Linux下自动化脚本"></a>Linux下自动化脚本</h2><h3 id="根据输入进程描述自动杀死进程"><a href="#根据输入进程描述自动杀死进程" class="headerlink" title="根据输入进程描述自动杀死进程"></a>根据输入进程描述自动杀死进程</h3><ul>
+<li><p>有时候要杀死tomcat进程通常都是分步骤找到pid再kill</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ps -ef | grep desc</span></span><br><span class="line">email     6762     1  0 Aug07 ?        00:01:03 processDesc</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">得到上述pid 6762然后<span class="built_in">kill</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">kill</span> -s 9 6762</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>以上操作往往效率比较低，现在可以通过awk配合<code>ps -ef | grep desc</code> 命令自动获取pid并杀死进程，可以将下述代码保存为可执行文件，在后续直接执行并输入进程描述来达成自动杀死进程的目的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">kill_func() &#123;</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">赋值输入的进程描述信息</span></span><br><span class="line">  processDesc=$1</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">得到进程描述信息匹配到的进程数量，如果不唯一则退出，防止误杀</span></span><br><span class="line">  PCOUNT=$(ps -ef | grep $processDesc | grep -v grep | awk &#x27;END&#123;print NR&#125;&#x27;)</span><br><span class="line">  if [ $PCOUNT -gt 1 ]; then</span><br><span class="line">    echo &quot;for input [$processDesc] found $PCOUNT processes, pid is not unique,please recheck your input.&quot;</span><br><span class="line">    exit</span><br><span class="line">  elif [ $PCOUNT -eq 0 ]; then</span><br><span class="line">    echo &quot;process $processDesc not exist&quot;</span><br><span class="line">    exit</span><br><span class="line">  fi</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">得到进程PID然后执行<span class="built_in">kill</span></span></span><br><span class="line">  PID=$(ps -ef |grep $processDesc | grep -v grep | awk &#x27;&#123;printf $2&#125;&#x27;)</span><br><span class="line">  if [ $? -eq 0 ]; then</span><br><span class="line">    echo &quot;process id:$PID&quot;</span><br><span class="line">  else</span><br><span class="line">    echo &quot;process $processDesc not exist&quot;</span><br><span class="line">    exit</span><br><span class="line">  fi</span><br><span class="line">  kill -9 $&#123;PID&#125;</span><br><span class="line">  if [ $? -eq 0 ];then</span><br><span class="line">    echo &quot;kill $processDesc success&quot;</span><br><span class="line">  else</span><br><span class="line">    echo &quot;kill $processDesc fail&quot;</span><br><span class="line">  fi</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">输入进程描述信息</span></span><br><span class="line">echo &quot;please input process descripe info&quot;</span><br><span class="line">read input</span><br><span class="line">kill_func $input</span><br><span class="line">echo &quot;done!&quot;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>##Linux下常用命令</p>
+<h3 id="查看当前目录下各个文件夹的大小"><a href="#查看当前目录下各个文件夹的大小" class="headerlink" title="查看当前目录下各个文件夹的大小"></a>查看当前目录下各个文件夹的大小</h3><ul>
+<li><code>du -h --max-depth=1</code> -h命令用来人性化展示容量单位 达到1000k用m 1000m用G,依次类推</li>
+</ul>
+<h3 id="查看磁盘总体用量"><a href="#查看磁盘总体用量" class="headerlink" title="查看磁盘总体用量"></a>查看磁盘总体用量</h3><ul>
+<li><code>df -h</code></li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://tonyjiangwj.github.io/2018/08/09/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%A1/" title="常用命令小计" target="_blank" rel="external">https://tonyjiangwj.github.io/2018/08/09/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%A1/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/tonyjiangwj" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/tonyjiangwj" target="_blank"><span class="text-dark">TonyJiangWJ</span><small class="ml-1x">Backend &amp; Rookie Web Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDMzNi8yMDg2OA==">
+        <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/08/13/tar%E5%8E%8B%E7%BC%A9%E8%A7%A3%E5%8E%8B%E7%BC%A9%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/" title="tar压缩解压缩命令详解"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/08/02/%E8%AE%B0%E5%BD%95%E5%87%A0%E4%B8%AA%E5%92%8CSafari%E6%9C%89%E5%85%B3%E7%9A%84%E5%9D%91/" title="记录几个和Safari有关的坑"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/tonyjiangwj" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+<script defer type="text/javascript">
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+
+    if (typeof LivereTower === 'function') { return; }
+
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

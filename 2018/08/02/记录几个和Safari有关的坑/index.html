@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>记录几个和Safari有关的坑 | TonyJiangWJ的个人博客</title>
+  <meta name="description" content="记录几个和Safari有关的坑前段时间用vue开发移动端应用遇到了几个问题，现在记录一下  第一个是和a标签有关的 第二个和date format有关  1.a标签的坑 这是一个很简单错误，但是愣是让我找了半天才找到； 1&lt;a href&#x3D;&quot;#&quot; @click&#x3D;&quot;$router.go(-1)&quot;&gt;返回&lt;&#x2F;a&gt; a标签的click返回上级的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录几个和Safari有关的坑">
+<meta property="og:url" content="https://tonyjiangwj.github.io/2018/08/02/%E8%AE%B0%E5%BD%95%E5%87%A0%E4%B8%AA%E5%92%8CSafari%E6%9C%89%E5%85%B3%E7%9A%84%E5%9D%91/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="记录几个和Safari有关的坑前段时间用vue开发移动端应用遇到了几个问题，现在记录一下  第一个是和a标签有关的 第二个和date format有关  1.a标签的坑 这是一个很简单错误，但是愣是让我找了半天才找到； 1&lt;a href&#x3D;&quot;#&quot; @click&#x3D;&quot;$router.go(-1)&quot;&gt;返回&lt;&#x2F;a&gt; a标签的click返回上级的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-08-02T05:35:58.000Z">
+<meta property="article:modified_time" content="2018-08-11T01:23:14.654Z">
+<meta property="article:author" content="TonyJiang">
+<meta property="article:tag" content="jQuery">
+<meta property="article:tag" content="表格">
+<meta property="article:tag" content="表单验证">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://tonyjiangwj.github.io/2018/08/02/%E8%AE%B0%E5%BD%95%E5%87%A0%E4%B8%AA%E5%92%8CSafari%E6%9C%89%E5%85%B3%E7%9A%84%E5%9D%91/index.html">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/tonyjiangwj" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">TonyJiangWJ</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Backend &amp; Rookie Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Hangzhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/tonyjiangwj" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/">脚本命令</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" rel="tag">脚本命令</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" rel="tag">表单验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E6%A0%BC/" rel="tag">表格</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Android/" style="font-size: 13px;">Android</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Shell/" style="font-size: 14px;">Shell</a> <a href="/tags/hexo/" style="font-size: 13px;">hexo</a> <a href="/tags/jQuery/" style="font-size: 13px;">jQuery</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 13.5px;">后端</a> <a href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" style="font-size: 13.5px;">脚本命令</a> <a href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">表单验证</a> <a href="/tags/%E8%A1%A8%E6%A0%BC/" style="font-size: 13px;">表格</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/09/%E5%AE%89%E8%A3%85PowerShell7%E5%B9%B6%E9%85%8D%E7%BD%AEohmyposh/" class="title">安装PowerShell7并配置ohmyposh</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-09T06:13:50.000Z" itemprop="datePublished">2023-09-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/18/%E7%9B%B8%E5%AF%B9%E5%AE%89%E5%85%A8%E6%96%B9%E5%BC%8F%E4%BF%9D%E5%AD%98SSH%E5%AF%86%E7%A0%81%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/" class="title">相对安全方式保存SSH密码并实现自动登录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-18T12:34:52.000Z" itemprop="datePublished">2021-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/" class="title">将opencv-android-sdk打包成aar文件</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-07T02:11:34.000Z" itemprop="datePublished">2021-01-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/21/%E8%87%AA%E5%BB%BAkms%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E9%80%9A%E8%BF%87docker%E9%83%A8%E7%BD%B2/" class="title">自建kms服务器并通过docker部署</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-21T12:08:39.000Z" itemprop="datePublished">2020-07-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/" class="title">使用Protobuf实现跨语言序列化和反序列化，Java&amp;Python实例</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-11-01T05:46:27.000Z" itemprop="datePublished">2019-11-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-记录几个和Safari有关的坑" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      记录几个和Safari有关的坑
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/08/02/%E8%AE%B0%E5%BD%95%E5%87%A0%E4%B8%AA%E5%92%8CSafari%E6%9C%89%E5%85%B3%E7%9A%84%E5%9D%91/" class="article-date">
+	  <time datetime="2018-08-02T05:35:58.000Z" itemprop="datePublished">2018-08-02</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/jQuery/" rel="tag">jQuery</a>, <a class="article-tag-link-link" href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" rel="tag">表单验证</a>, <a class="article-tag-link-link" href="/tags/%E8%A1%A8%E6%A0%BC/" rel="tag">表格</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/08/02/%E8%AE%B0%E5%BD%95%E5%87%A0%E4%B8%AA%E5%92%8CSafari%E6%9C%89%E5%85%B3%E7%9A%84%E5%9D%91/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.2k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="记录几个和Safari有关的坑"><a href="#记录几个和Safari有关的坑" class="headerlink" title="记录几个和Safari有关的坑"></a>记录几个和Safari有关的坑</h1><p>前段时间用vue开发移动端应用遇到了几个问题，现在记录一下</p>
+<ul>
+<li>第一个是和a标签有关的</li>
+<li>第二个和date format有关</li>
+</ul>
+<h2 id="1-a标签的坑"><a href="#1-a标签的坑" class="headerlink" title="1.a标签的坑"></a>1.a标签的坑</h2><p> 这是一个很简单错误，但是愣是让我找了半天才找到；</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;$router.go(-1)&quot;</span>&gt;</span>返回<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>a标签的click返回上级的动作，代码如上所示；</p>
+<p>项目中使用了vue-router中router.go(-1)来跳转，一开始在PC和安卓模拟器上试了各种跳转完全没有问题，后来用iPhone来测试之后愣是怎么点都没用反应，期间我试了原生的history.back()&#x2F;history.go(-1)都没用作用。然后去google找啊找，找到的内容有说Safari不支持History的操作，我信了，然后看的云里雾里，还是没搞懂为什么不支持，如果不支持那其他应用是怎么跳转的，而且以前的项目也都是用history来操作返回的呀，没见过反应说Safari不能使用呀。然后继续在google上找啊找，找到很多都是如下所说的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">解决方法很简单！加上return false; 就可以了</span><br><span class="line">&lt;a href=&quot;#&quot; class=&quot;back&quot; onclick=&quot;javascript: window.history.go(-1);return false;&quot;&gt;&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>于是我就按他说的做了，嗯，确实可以跳转了，但是这么写也太不优雅了，而且我把<code>javascript: window.history.go(-1);return false;</code>写到function里面通过@click触发之后还是失败，甚是奇怪，这是为什么呢 到底为啥，这时我已经自暴自弃了。本着钻牛角尖的精神我还是不想用上述这么丑的操作，在每个标签里面都写js代码不仅累，而且维护起来也麻烦。在不知道各种试了多久之后，我才恍然醒悟，我以前写a标签里面href都是写成<code>href=&quot;javascript:void(0);&quot;</code>的，而这个项目直接复制的美工提供的静态代码，没有注意到他里面写的是<code>href=&quot;#&quot;</code>，而且google找到的这个解决办法里面也是写成<code>href=&quot;#&quot;</code>的。于是我将<code>href=&quot;#&quot;</code>改成了<code>href=&quot;javascript:void(0);&quot;</code>，然后重新用手机试了一下发现果然是这里的问题。那么为什么在其他平台的浏览器能行，但是在Safari上就不行，实在是想不通，私以为Safari认为点击之后就是跳到#，也就是向上滚动到锚点#top了，后续的History跳转都不会去执行。那么同时，为什么改成<code>href=&quot;javascript:void(0);&quot;</code>配合function就能和直接在html代码里面嵌入js代码达到一样的效果呢？继续google发现有说法是<code>&lt;a href=&quot;#&quot; onclick=&quot;javascript:return false;&quot;&gt;</code>和<code>&lt;a href=&quot;javascript:void(0);&quot; onclick=&quot;back()&quot;&gt;</code>是等价的，这么一说好像确实有道理，毕竟实践的结果确实是等价的。然后他们又说不推荐后者的写法，给出的原因是IE6什么的有问题，看到这里我喷了，IE6？适配？不存在的！我还是按后者写吧，更简洁而且click事件写在function里面方便维护扩展其他功能。同时也有说法是写成javascript:;也能达到同样的效果，这就见仁见智吧我觉得五五开，都可以。</p>
+<p>所以这个困扰我大半天的bug，就这么解决了。冷漠脸。感觉浪费了大把青春啊。果然还是因为姿势水平不够，需要更多的积累。</p>
+<h2 id="2-Safari里面的Date-Format问题"><a href="#2-Safari里面的Date-Format问题" class="headerlink" title="2.Safari里面的Date Format问题"></a>2.Safari里面的Date Format问题</h2><p>除了上述那个困扰我那么久的问题，另一个就是我在其他平台上都正常的<code>new Date()</code>日期格式化，在Safari里面格式化出来的是<code>invalid date</code>。在后台日期都是被格式化成<code>yyyy-MM-dd HH:mm:ss</code>格式的，但是前台显示不需要时间只需要日期，因为显示的同时要通过时间选择控件修改这个日期，所以没有用substring字符串截取方式直接获得日期，转而在前端用<code>new Date(dateStr)</code>转成Date再通过通用方法格式化成<code>yyyy-MM-dd</code>格式的字符串。<br>但是在Safari里，界面上显示的都成了<code>Nan-Nan-Nan</code>，通过alert调试发现<code>new Date()</code>得到的是invalid date，但是在电脑上又是正常的。基于上一个问题的经验，我马上去google了一下Safari中日期格式化的问题，果不其然，<code>YYYY-MM-DD</code>格式是包含在ECMAScript标准中的，只是Safari没有实现，没有实现。。。竟然还能这样。<br>那既然知道为什么了，解决起来也就很简单了，只需要将<code>-</code>改为<code>/</code>再new Date format一下就行了，<code>new Date(dateStr.replace(/-/g, &#39;&#39;))</code>妥妥的解决。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://tonyjiangwj.github.io/2018/08/02/%E8%AE%B0%E5%BD%95%E5%87%A0%E4%B8%AA%E5%92%8CSafari%E6%9C%89%E5%85%B3%E7%9A%84%E5%9D%91/" title="记录几个和Safari有关的坑" target="_blank" rel="external">https://tonyjiangwj.github.io/2018/08/02/%E8%AE%B0%E5%BD%95%E5%87%A0%E4%B8%AA%E5%92%8CSafari%E6%9C%89%E5%85%B3%E7%9A%84%E5%9D%91/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/tonyjiangwj" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/tonyjiangwj" target="_blank"><span class="text-dark">TonyJiangWJ</span><small class="ml-1x">Backend &amp; Rookie Web Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDMzNi8yMDg2OA==">
+        <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/08/09/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%A1/" title="常用命令小计"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/08/02/hello-world/" title="Hello World"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/tonyjiangwj" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+<script defer type="text/javascript">
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+
+    if (typeof LivereTower === 'function') { return; }
+
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

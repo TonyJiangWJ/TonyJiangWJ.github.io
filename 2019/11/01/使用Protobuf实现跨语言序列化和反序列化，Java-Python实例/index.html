@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>使用Protobuf实现跨语言序列化和反序列化，Java&amp;Python实例 | TonyJiangWJ的个人博客</title>
+  <meta name="description" content="使用protobuf实现跨语言序列化 Java和Python实例首先下载安装protoc github.releases 对于OS X可以通过brew直接安装  brew install protobuf  安装完可以通过protoc --version查看版本信息  创建proto文件-带Any类型的版本带Any类型的只能导出pb2类型的Python文件，没法导出Python3 的版本，暂时不知">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Protobuf实现跨语言序列化和反序列化，Java&amp;Python实例">
+<meta property="og:url" content="https://tonyjiangwj.github.io/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="使用protobuf实现跨语言序列化 Java和Python实例首先下载安装protoc github.releases 对于OS X可以通过brew直接安装  brew install protobuf  安装完可以通过protoc --version查看版本信息  创建proto文件-带Any类型的版本带Any类型的只能导出pb2类型的Python文件，没法导出Python3 的版本，暂时不知">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-11-01T05:46:27.000Z">
+<meta property="article:modified_time" content="2023-09-09T02:37:32.401Z">
+<meta property="article:author" content="TonyJiang">
+<meta property="article:tag" content="后端">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://tonyjiangwj.github.io/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/index.html">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/tonyjiangwj" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">TonyJiangWJ</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Backend &amp; Rookie Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Hangzhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/tonyjiangwj" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/">脚本命令</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/" rel="tag">jQuery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" rel="tag">脚本命令</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" rel="tag">表单验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E6%A0%BC/" rel="tag">表格</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Android/" style="font-size: 13px;">Android</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Shell/" style="font-size: 14px;">Shell</a> <a href="/tags/hexo/" style="font-size: 13px;">hexo</a> <a href="/tags/jQuery/" style="font-size: 13px;">jQuery</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 13.5px;">后端</a> <a href="/tags/%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" style="font-size: 13.5px;">脚本命令</a> <a href="/tags/%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">表单验证</a> <a href="/tags/%E8%A1%A8%E6%A0%BC/" style="font-size: 13px;">表格</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/09/09/%E5%AE%89%E8%A3%85PowerShell7%E5%B9%B6%E9%85%8D%E7%BD%AEohmyposh/" class="title">安装PowerShell7并配置ohmyposh</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-09T06:13:50.000Z" itemprop="datePublished">2023-09-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/18/%E7%9B%B8%E5%AF%B9%E5%AE%89%E5%85%A8%E6%96%B9%E5%BC%8F%E4%BF%9D%E5%AD%98SSH%E5%AF%86%E7%A0%81%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/" class="title">相对安全方式保存SSH密码并实现自动登录</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-18T12:34:52.000Z" itemprop="datePublished">2021-03-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/01/07/%E5%B0%86opencv-android-sdk%E6%89%93%E5%8C%85%E6%88%90aar%E6%96%87%E4%BB%B6/" class="title">将opencv-android-sdk打包成aar文件</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-07T02:11:34.000Z" itemprop="datePublished">2021-01-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/21/%E8%87%AA%E5%BB%BAkms%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E9%80%9A%E8%BF%87docker%E9%83%A8%E7%BD%B2/" class="title">自建kms服务器并通过docker部署</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-21T12:08:39.000Z" itemprop="datePublished">2020-07-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/" class="title">使用Protobuf实现跨语言序列化和反序列化，Java&amp;Python实例</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-11-01T05:46:27.000Z" itemprop="datePublished">2019-11-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-使用Protobuf实现跨语言序列化和反序列化，Java-Python实例" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用Protobuf实现跨语言序列化和反序列化，Java&amp;Python实例
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/" class="article-date">
+	  <time datetime="2019-11-01T05:46:27.000Z" itemprop="datePublished">2019-11-01</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Java/" rel="tag">Java</a>, <a class="article-tag-link-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3.7k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 20(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="使用protobuf实现跨语言序列化-Java和Python实例"><a href="#使用protobuf实现跨语言序列化-Java和Python实例" class="headerlink" title="使用protobuf实现跨语言序列化 Java和Python实例"></a>使用protobuf实现跨语言序列化 Java和Python实例</h2><h3 id="首先下载安装protoc"><a href="#首先下载安装protoc" class="headerlink" title="首先下载安装protoc"></a>首先下载安装protoc</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/releases">github.releases</a></li>
+<li>对于OS X可以通过brew直接安装 <code> brew install protobuf</code> </li>
+<li>安装完可以通过<code>protoc --version</code>查看版本信息</li>
+</ul>
+<h3 id="创建proto文件-带Any类型的版本"><a href="#创建proto文件-带Any类型的版本" class="headerlink" title="创建proto文件-带Any类型的版本"></a>创建proto文件-带Any类型的版本</h3><h4 id="带Any类型的只能导出pb2类型的Python文件，没法导出Python3-的版本，暂时不知道如何解决"><a href="#带Any类型的只能导出pb2类型的Python文件，没法导出Python3-的版本，暂时不知道如何解决" class="headerlink" title="带Any类型的只能导出pb2类型的Python文件，没法导出Python3 的版本，暂时不知道如何解决"></a>带Any类型的只能导出pb2类型的Python文件，没法导出Python3 的版本，暂时不知道如何解决</h4><ul>
+<li><p>Any类型的字段可以在java中实现泛型的功能</p>
+</li>
+<li><p>MessageDto.proto</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;google/protobuf/any.proto&quot;</span>;</span><br><span class="line"><span class="keyword">message </span><span class="title class_">MessageDto</span> &#123;</span><br><span class="line">	<span class="type">string</span> action=<span class="number">1</span>;</span><br><span class="line">	<span class="type">int32</span> statte=<span class="number">2</span>;</span><br><span class="line">	google.protobuf.Any data=<span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>RpcCmd.proto</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;MessageDto.proto&quot;</span>;</span><br><span class="line"><span class="keyword">message </span><span class="title class_">RpcCmd</span> &#123;</span><br><span class="line">	MessageDto message=<span class="number">1</span>;</span><br><span class="line">	<span class="type">string</span> randomKey=<span class="number">2</span>;</span><br><span class="line">	<span class="type">string</span> remoteAddressKey=<span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Point2PointMessage.proto</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"><span class="keyword">message </span><span class="title class_">Point2PointMessage</span> &#123;</span><br><span class="line">	<span class="type">string</span> targetAddressKey;</span><br><span class="line">	<span class="type">string</span> message;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>BytesData.proto</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"><span class="keyword">message </span><span class="title class_">BytesData</span> &#123;</span><br><span class="line">    <span class="type">bytes</span> content=<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="导出相应的对象定义文件"><a href="#导出相应的对象定义文件" class="headerlink" title="导出相应的对象定义文件"></a>导出相应的对象定义文件</h3><h4 id="Python版"><a href="#Python版" class="headerlink" title="Python版"></a>Python版</h4><ul>
+<li><p><code>protoc --python_out=./gen_pb2 RpcCmd.proto MessageDto.proto Point2PointMessage.proto BytesData.proto</code> </p>
+</li>
+<li><p>生成的文件名为XXX_pb2.py</p>
+</li>
+</ul>
+<h4 id="Java版"><a href="#Java版" class="headerlink" title="Java版"></a>Java版</h4><ul>
+<li><p><code>protoc --java_out=./gen_java RpcCmd.proto MessageDto.proto Point2PointMessage.proto BytesData.proto </code></p>
+</li>
+<li><p>生成的文件名为XXXOuterClass.java</p>
+</li>
+</ul>
+<h3 id="在Python中使用"><a href="#在Python中使用" class="headerlink" title="在Python中使用"></a>在Python中使用</h3><ul>
+<li><p>首先要导入生成的文件，放到自己喜欢的包下，然后修改导入包的地址，比如RpcCmd_pb2.py中修改</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.tony.proto.py2.MessageDto_pb2 <span class="keyword">as</span> MessageDto__pb2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后开始使用  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> com.tony.proto.py2 <span class="keyword">import</span> RpcCmd_pb2, Point2PointMessage_pb2, BytesData_pb2, MessageDto_pb2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">serialize_to_file</span>(<span class="params">file_path</span>):</span><br><span class="line">    p2p_msg = Point2PointMessage_pb2.Point2PointMessage()</span><br><span class="line">    p2p_msg.message = <span class="string">&quot;Hello, p2p from python&quot;</span></span><br><span class="line">    p2p_msg.targetAddressKey = <span class="string">&quot;/127.0.0.1:38211&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># bytes_data = BytesData_pb2.BytesData()</span></span><br><span class="line">    <span class="comment"># bytes_data.content = b&quot;Hello, bytes data from python&quot;</span></span><br><span class="line"></span><br><span class="line">    rpc_cmd = RpcCmd_pb2.RpcCmd()</span><br><span class="line">    rpc_cmd.randomKey = <span class="string">&quot;random-key-key-random&quot;</span></span><br><span class="line">    rpc_cmd.remoteAddressKey = <span class="string">&quot;/127.0.0.1:1234&quot;</span></span><br><span class="line">    rpc_cmd.message.action = <span class="string">&quot;p2p&quot;</span></span><br><span class="line">    rpc_cmd.message.state = <span class="number">100</span></span><br><span class="line">    rpc_cmd.message.data.Pack(p2p_msg)</span><br><span class="line">    <span class="comment"># rpc_cmd.message.data.Pack(bytes_data)</span></span><br><span class="line"></span><br><span class="line">    bytes_write = rpc_cmd.SerializeToString()</span><br><span class="line"></span><br><span class="line">    fw = <span class="built_in">open</span>(file_path, mode=<span class="string">&quot;wb&quot;</span>)</span><br><span class="line">    fw.write(bytes_write)</span><br><span class="line">    fw.flush()</span><br><span class="line">    fw.close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;write bytes to file:&quot;</span>, bytes_write)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">deserialize_from_file</span>(<span class="params">file_path</span>):</span><br><span class="line">    fo = <span class="built_in">open</span>(file_path, mode=<span class="string">&quot;rb&quot;</span>)</span><br><span class="line">    bytes_read = fo.read()</span><br><span class="line">    fo.close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;read bytes from file:&quot;</span>, bytes_read)</span><br><span class="line">    rpc_cmd = RpcCmd_pb2.RpcCmd()</span><br><span class="line">    rpc_cmd.ParseFromString(bytes_read)</span><br><span class="line">    <span class="built_in">print</span>(rpc_cmd)</span><br><span class="line"></span><br><span class="line">    p2p_msg = Point2PointMessage_pb2.Point2PointMessage()</span><br><span class="line">    <span class="comment"># bytes_data = BytesData_pb2.BytesData()</span></span><br><span class="line">    <span class="comment"># rpc_cmd.message.data.Unpack(bytes_data)</span></span><br><span class="line">    rpc_cmd.message.data.Unpack(p2p_msg)</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;msg_content:&quot;</span>, p2p_msg.message)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;msg_target:&quot;</span>, p2p_msg.targetAddressKey)</span><br><span class="line">    <span class="comment"># print(&quot;bytes_data:&quot;, str(bytes_data.content, &#x27;utf-8&#x27;))</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    serialize_file_path = <span class="string">&quot;/trans-data-pb2.dat&quot;</span></span><br><span class="line">    serialize_to_file(serialize_file_path)</span><br><span class="line">    deserialize_from_file(serialize_file_path)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果如下，可以将bytes_data相关的注释取消同时注释掉p2p_msg相关的测试BytesData类型的序列化和反序列化</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">write bytes to file: b&#x27;\n]\n\x03p2p\x10d\x1aT\n&amp;type.googleapis.com/Point2PointMessage\x12*\n\x10/127.0.0.1:38211\x12\x16Hello, p2p from python\x12\x15random-key-key-random\x1a\x0f/127.0.0.1:1234&#x27;</span><br><span class="line">read bytes from file: b&#x27;\n]\n\x03p2p\x10d\x1aT\n&amp;type.googleapis.com/Point2PointMessage\x12*\n\x10/127.0.0.1:38211\x12\x16Hello, p2p from python\x12\x15random-key-key-random\x1a\x0f/127.0.0.1:1234&#x27;</span><br><span class="line">message &#123;</span><br><span class="line">  action: &quot;p2p&quot;</span><br><span class="line">  state: 100</span><br><span class="line">  data &#123;</span><br><span class="line">    type_url: &quot;type.googleapis.com/Point2PointMessage&quot;</span><br><span class="line">    value: &quot;\n\020/127.0.0.1:38211\022\026Hello, p2p from python&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">randomKey: &quot;random-key-key-random&quot;</span><br><span class="line">remoteAddressKey: &quot;/127.0.0.1:1234&quot;</span><br><span class="line"></span><br><span class="line">msg_content: Hello, p2p from python</span><br><span class="line">msg_target: /127.0.0.1:38211</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="在Java中使用"><a href="#在Java中使用" class="headerlink" title="在Java中使用"></a>在Java中使用</h3><ul>
+<li><p>同样导入到喜欢的包下，修改对应的包名即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProtobufSerializeDemo</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">serializeToFile</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Point2PointMessageOuterClass.Point2PointMessage.<span class="type">Builder</span> <span class="variable">p2pMsgBuilder</span> <span class="operator">=</span> Point2PointMessageOuterClass.Point2PointMessage.newBuilder();</span><br><span class="line">        p2pMsgBuilder.setTargetAddressKey(<span class="string">&quot;/127.0.0.1:1233&quot;</span>);</span><br><span class="line">        p2pMsgBuilder.setMessage(<span class="string">&quot;hello from java&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        BytesDataOuterClass.BytesData.Builder bytesBuilder = BytesDataOuterClass.BytesData.newBuilder();</span></span><br><span class="line"><span class="comment">//        bytesBuilder.setContent(ByteString.copyFrom(&quot;bytes data from java&quot;.getBytes(StandardCharsets.UTF_8)));</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        MessageDtoOuterClass.MessageDto.<span class="type">Builder</span> <span class="variable">messageBuilder</span> <span class="operator">=</span> MessageDtoOuterClass.MessageDto.newBuilder();</span><br><span class="line">        messageBuilder.setAction(<span class="string">&quot;p2p&quot;</span>);</span><br><span class="line">        messageBuilder.setState(<span class="number">100</span>);</span><br><span class="line">        messageBuilder.setData(Any.pack(p2pMsgBuilder.build()));</span><br><span class="line"><span class="comment">//        messageBuilder.setData(Any.pack(bytesBuilder.build()));</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        RpcCmdOuterClass.RpcCmd.<span class="type">Builder</span> <span class="variable">builder</span> <span class="operator">=</span> RpcCmdOuterClass.RpcCmd.newBuilder();</span><br><span class="line">        builder.setRandomKey(<span class="string">&quot;RANDOM_KEY_JAVA&quot;</span>);</span><br><span class="line">        builder.setRemoteAddressKey(<span class="string">&quot;/127.0.0.1:1234&quot;</span>);</span><br><span class="line">        builder.setMessage(messageBuilder.build());</span><br><span class="line"></span><br><span class="line">        builder.build().writeTo(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;java_protobuf.dat&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deserializeFromFile</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        RpcCmdOuterClass.<span class="type">RpcCmd</span> <span class="variable">rpcCmd</span> <span class="operator">=</span> RpcCmdOuterClass.RpcCmd.parseFrom(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;java_protobuf.dat&quot;</span>));</span><br><span class="line">        Point2PointMessageOuterClass.<span class="type">Point2PointMessage</span> <span class="variable">p2pMsg</span> <span class="operator">=</span> rpcCmd.getMessage().getData().unpack(Point2PointMessageOuterClass.Point2PointMessage.class);</span><br><span class="line"><span class="comment">//        BytesDataOuterClass.BytesData bytesData = rpcCmd.getMessage().getData().unpack(BytesDataOuterClass.BytesData.class);</span></span><br><span class="line">        log.info(<span class="string">&quot;deserialize rpcCmd: \n&#123;&#125;&quot;</span>, rpcCmd);</span><br><span class="line">        log.info(<span class="string">&quot;deserialize p2pMsg: \n&#123;&#125;&quot;</span>, p2pMsg);</span><br><span class="line"><span class="comment">//        log.info(&quot;deserialize bytesData: \n&#123;&#125;&quot;, bytesData);</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果，可以将bytes_data相关的注释取消同时注释掉p2p_msg相关的测试BytesData类型的序列化和反序列化</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">10:22:03.118 [main] INFO com.tony.proto.ProtobufSerializeDemo - deserialize rpcCmd: </span><br><span class="line">message &#123;</span><br><span class="line">  action: &quot;p2p&quot;</span><br><span class="line">  state: 100</span><br><span class="line">  data &#123;</span><br><span class="line">    type_url: &quot;type.googleapis.com/Point2PointMessage&quot;</span><br><span class="line">    value: &quot;\n\017/127.0.0.1:1233\022\017hello from java&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">randomKey: &quot;RANDOM_KEY_JAVA&quot;</span><br><span class="line">remoteAddressKey: &quot;/127.0.0.1:1234&quot;</span><br><span class="line"></span><br><span class="line">10:22:03.168 [main] INFO com.tony.proto.ProtobufSerializeDemo - deserialize p2pMsg: </span><br><span class="line">targetAddressKey: &quot;/127.0.0.1:1233&quot;</span><br><span class="line">message: &quot;hello from java&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="然后是Java和Python之间互相序列化和反序列化"><a href="#然后是Java和Python之间互相序列化和反序列化" class="headerlink" title="然后是Java和Python之间互相序列化和反序列化"></a>然后是Java和Python之间互相序列化和反序列化</h3><ul>
+<li>只需要修改对应的文件地址就可以进行测试</li>
+</ul>
+<h5 id="Python反序列化Java"><a href="#Python反序列化Java" class="headerlink" title="Python反序列化Java"></a>Python反序列化Java</h5>  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">java_serialize_file_path = $path_to_java_serialized$</span><br><span class="line">deserialize_from_file(java_serialize_file_path)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>执行结果，这里演示的是BytesData类型的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">read bytes from file: b&#x27;\n@\n\x03p2p\x10d\x1a7\n\x1dtype.googleapis.com/BytesData\x12\x16\n\x14bytes data from java\x12\x0fRANDOM_KEY_JAVA\x1a\x0f/127.0.0.1:1234&#x27;</span><br><span class="line">message &#123;</span><br><span class="line">  action: &quot;p2p&quot;</span><br><span class="line">  state: 100</span><br><span class="line">  data &#123;</span><br><span class="line">    type_url: &quot;type.googleapis.com/BytesData&quot;</span><br><span class="line">    value: &quot;\n\024bytes data from java&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">randomKey: &quot;RANDOM_KEY_JAVA&quot;</span><br><span class="line">remoteAddressKey: &quot;/127.0.0.1:1234&quot;</span><br><span class="line"></span><br><span class="line">bytes_data: bytes data from java</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="Java反序列化Python"><a href="#Java反序列化Python" class="headerlink" title="Java反序列化Python"></a>Java反序列化Python</h5>  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deserializeFromPythonFile</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        RpcCmdOuterClass.<span class="type">RpcCmd</span> <span class="variable">rpcCmd</span> <span class="operator">=</span> RpcCmdOuterClass.RpcCmd.parseFrom(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>($path_to_python_serialize$));</span><br><span class="line"><span class="comment">//        Point2PointMessageOuterClass.Point2PointMessage p2pMsg = rpcCmd.getMessage().getData().unpack(Point2PointMessageOuterClass.Point2PointMessage.class);</span></span><br><span class="line">        BytesDataOuterClass.<span class="type">BytesData</span> <span class="variable">bytesData</span> <span class="operator">=</span> rpcCmd.getMessage().getData().unpack(BytesDataOuterClass.BytesData.class);</span><br><span class="line">        log.info(<span class="string">&quot;deserialize rpcCmd: \n&#123;&#125;&quot;</span>, rpcCmd);</span><br><span class="line"><span class="comment">//        log.info(&quot;deserialize p2pMsg: \n&#123;&#125;&quot;, p2pMsg);</span></span><br><span class="line">        log.info(<span class="string">&quot;deserialize bytesData: \n&#123;&#125;&quot;</span>, bytesData);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>执行结果，同样是BytesData类型的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">10:33:03.360 [main] INFO com.tony.proto.ProtobufSerializeDemo - deserialize rpcCmd: </span><br><span class="line">message &#123;</span><br><span class="line">  action: &quot;p2p&quot;</span><br><span class="line">  state: 100</span><br><span class="line">  data &#123;</span><br><span class="line">    type_url: &quot;type.googleapis.com/BytesData&quot;</span><br><span class="line">    value: &quot;\n\035Hello, bytes data from python&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">randomKey: &quot;random-key-key-random&quot;</span><br><span class="line">remoteAddressKey: &quot;/127.0.0.1:1234&quot;</span><br><span class="line"></span><br><span class="line">10:33:03.402 [main] INFO com.tony.proto.ProtobufSerializeDemo - deserialize bytesData: </span><br><span class="line">content: &quot;Hello, bytes data from python&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="在Java平台，还有个更好用的工具可以不用手写proto文件"><a href="#在Java平台，还有个更好用的工具可以不用手写proto文件" class="headerlink" title="在Java平台，还有个更好用的工具可以不用手写proto文件"></a>在Java平台，还有个更好用的工具可以不用手写proto文件</h3><ul>
+<li><p>这个工具是io.protostuff</p>
+</li>
+<li><p>通过maven导入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.protostuff<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>protostuff-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.6.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.protostuff<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>protostuff-runtime<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.6.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 用于创建对象 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.objenesis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>objenesis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="创建序列化工具类"><a href="#创建序列化工具类" class="headerlink" title="创建序列化工具类"></a>创建序列化工具类</h4>  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.protostuff.LinkedBuffer;</span><br><span class="line"><span class="keyword">import</span> io.protostuff.ProtobufIOUtil;</span><br><span class="line"><span class="keyword">import</span> io.protostuff.Schema;</span><br><span class="line"><span class="keyword">import</span> io.protostuff.runtime.DefaultIdStrategy;</span><br><span class="line"><span class="keyword">import</span> io.protostuff.runtime.RuntimeSchema;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.objenesis.Objenesis;</span><br><span class="line"><span class="keyword">import</span> org.objenesis.ObjenesisStd;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.OutputStream;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 基于Protostuff优化版的ProtobufIOUtil实现序列化，理论上可以支持跨语言序列化</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> jiangwenjie 2019/10/30</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProtobufSerializer</span> &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">Objenesis</span> <span class="variable">OBJENESIS</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjenesisStd</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">ProtobufSerializer</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">SingletonHolder</span> &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">ProtobufSerializer</span> <span class="variable">INSTANCE</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ProtobufSerializer</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ProtobufSerializer <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ProtobufSerializer.SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj, OutputStream outputStream)</span> &#123;</span><br><span class="line">        <span class="type">Class</span> <span class="variable">clz</span> <span class="operator">=</span> obj.getClass();</span><br><span class="line">        <span class="type">LinkedBuffer</span> <span class="variable">buffer</span> <span class="operator">=</span> LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Schema</span> <span class="variable">schema</span> <span class="operator">=</span> getSchema(clz);</span><br><span class="line">            ProtobufIOUtil.writeTo(outputStream, obj, schema, buffer);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;序列化对象失败&quot;</span>, e);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            buffer.clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">byte</span>[] serialize(Object obj) &#123;</span><br><span class="line">        <span class="type">Class</span> <span class="variable">clz</span> <span class="operator">=</span> obj.getClass();</span><br><span class="line">        <span class="type">LinkedBuffer</span> <span class="variable">buffer</span> <span class="operator">=</span> LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);</span><br><span class="line">        <span class="keyword">try</span> (<span class="type">ByteArrayOutputStream</span> <span class="variable">arrayOutputStream</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ByteArrayOutputStream</span>()) &#123;</span><br><span class="line">            <span class="type">Schema</span> <span class="variable">schema</span> <span class="operator">=</span> getSchema(clz);</span><br><span class="line">            ProtobufIOUtil.writeTo(arrayOutputStream, obj, schema, buffer);</span><br><span class="line">            <span class="keyword">return</span> arrayOutputStream.toByteArray();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;序列化对象失败&quot;</span>, e);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            buffer.clear();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; T <span class="title function_">deSerialize</span><span class="params">(InputStream inputStream, Class&lt;T&gt; clazz)</span> &#123;</span><br><span class="line">        <span class="type">T</span> <span class="variable">object</span> <span class="operator">=</span> OBJENESIS.newInstance(clazz);</span><br><span class="line">        Schema&lt;T&gt; schema = getSchema(clazz);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ProtobufIOUtil.mergeFrom(inputStream, object, schema);</span><br><span class="line">            <span class="keyword">return</span> object;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;反序列化对象失败&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; T <span class="title function_">deSerialize</span><span class="params">(<span class="type">byte</span>[] param, Class&lt;T&gt; clazz)</span> &#123;</span><br><span class="line">        <span class="type">T</span> <span class="variable">object</span> <span class="operator">=</span> OBJENESIS.newInstance(clazz);</span><br><span class="line">        Schema&lt;T&gt; schema = getSchema(clazz);</span><br><span class="line">        <span class="keyword">try</span> (<span class="type">ByteArrayInputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ByteArrayInputStream</span>(param)) &#123;</span><br><span class="line">            ProtobufIOUtil.mergeFrom(inputStream, object, schema);</span><br><span class="line">            <span class="keyword">return</span> object;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;反序列化对象失败&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> &lt;T&gt; Schema&lt;T&gt; <span class="title function_">getSchema</span><span class="params">(Class&lt;T&gt; clz)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> RuntimeSchema.createFrom(clz, <span class="keyword">new</span> <span class="title class_">DefaultIdStrategy</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="创建序列化对象"><a href="#创建序列化对象" class="headerlink" title="创建序列化对象"></a>创建序列化对象</h4>  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> jiangwenjie 2019/10/22</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RpcCmd</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> MessageDto message;</span><br><span class="line">    <span class="keyword">private</span> String randomKey;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 目标地址，不需要序列化传输</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">transient</span> String remoteAddressKey;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.tony.constants.EnumNettyState;</span><br><span class="line"><span class="keyword">import</span> com.tony.serializer.impl.ProtobufSerializer;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.EqualsAndHashCode;</span><br><span class="line"><span class="keyword">import</span> lombok.ToString;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 消息对象</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> jiangwenjie 2019/10/22</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@ToString</span></span><br><span class="line"><span class="meta">@EqualsAndHashCode</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MessageDto</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String action;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">state</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 跨语言使用Protostuff中提供的protobuff序列化传递复杂对象</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">byte</span>[] bytesData;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Serializable serialData;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; T <span class="title function_">dataOfClazz</span><span class="params">(Class&lt;T&gt; clazz, <span class="type">boolean</span> isStuff)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (isStuff) &#123;</span><br><span class="line">            <span class="keyword">return</span> serialDataOfClazz(clazz);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> bytesDataOfClass(clazz);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Serializable</span>&gt; <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T object, <span class="type">boolean</span> isStuff)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (isStuff) &#123;</span><br><span class="line">            setSerialData(object);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            setBytesData(object);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> &lt;T&gt; T <span class="title function_">serialDataOfClazz</span><span class="params">(Class&lt;T&gt; clazz)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (serialData == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (clazz.isInstance(serialData)) &#123;</span><br><span class="line">            <span class="keyword">return</span> (T)serialData;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;data is not instance of class:&quot;</span> + clazz.getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> &lt;T&gt; T <span class="title function_">bytesDataOfClass</span><span class="params">(Class&lt;T&gt; clazz)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (bytesData == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> ProtobufSerializer.getInstance().deSerialize(bytesData, clazz);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;反序列化data对象失败，请确认对象是否为：&#123;&#125; 类型&quot;</span>, clazz);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Serializable</span>&gt; <span class="keyword">void</span> <span class="title function_">setBytesData</span><span class="params">(T data)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.bytesData = ProtobufSerializer.getInstance().serialize(data);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 点对点通信data对象</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> jiangwenjie 2019/10/26</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Point2PointMessage</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String targetAddressKey;</span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="序列化测试"><a href="#序列化测试" class="headerlink" title="序列化测试"></a>序列化测试</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> jiangwenjie 2019/11/1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JavaProtostuffSerializeDemo</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">serializeToFile</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">Point2PointMessage</span> <span class="variable">p2pMsg</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Point2PointMessage</span>();</span><br><span class="line">        p2pMsg.setTargetAddressKey(<span class="string">&quot;/127.0.0.1:1233&quot;</span>);</span><br><span class="line">        p2pMsg.setMessage(<span class="string">&quot;message from java&quot;</span>);</span><br><span class="line">        <span class="type">MessageDto</span> <span class="variable">messageDto</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MessageDto</span>();</span><br><span class="line">        messageDto.setAction(<span class="string">&quot;p2p&quot;</span>);</span><br><span class="line">        messageDto.setState(<span class="number">100</span>);</span><br><span class="line">        messageDto.setData(p2pMsg, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">RpcCmd</span> <span class="variable">rpcCmd</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RpcCmd</span>();</span><br><span class="line">        rpcCmd.setMessage(messageDto);</span><br><span class="line">        rpcCmd.setRandomKey(<span class="string">&quot;RANDOM_KEY_JAVA&quot;</span>);</span><br><span class="line">        rpcCmd.setRemoteAddressKey(<span class="string">&quot;/127.0.0.1:1234&quot;</span>);</span><br><span class="line">        ProtobufSerializer.getInstance().serialize(rpcCmd, <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;java_proto_simple.dat&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deserializeFromFile</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">RpcCmd</span> <span class="variable">rpcCmd</span> <span class="operator">=</span> ProtobufSerializer.getInstance().deSerialize(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;java_proto_simple.dat&quot;</span>), RpcCmd.class);</span><br><span class="line">        log.info(<span class="string">&quot;deserialize cmd:\n&#123;&#125;&quot;</span>, rpcCmd);</span><br><span class="line">        log.info(<span class="string">&quot;deserialize p2p msg:\n&#123;&#125;&quot;</span>, rpcCmd.getMessage().dataOfClazz(Point2PointMessage.class, <span class="literal">false</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="测试输出"><a href="#测试输出" class="headerlink" title="测试输出"></a>测试输出</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">11:02:45.646 [main] INFO com.tony.simple.JavaProtostuffSerializeDemo - deserialize cmd:</span><br><span class="line">RpcCmd(message=MessageDto(action=p2p, state=100, bytesData=[10, 15, 47, 49, 50, 55, 46, 48, 46, 48, 46, 49, 58, 49, 50, 51, 51, 18, 17, 109, 101, 115, 115, 97, 103, 101, 32, 102, 114, 111, 109, 32, 106, 97, 118, 97], serialData=null, isFromBuff=false), randomKey=RANDOM_KEY_JAVA, remoteAddressKey=null)</span><br><span class="line">11:02:45.651 [main] INFO com.tony.simple.JavaProtostuffSerializeDemo - deserialize p2p msg:</span><br><span class="line">Point2PointMessage(targetAddressKey=/127.0.0.1:1233, message=message from java)</span><br></pre></td></tr></table></figure>
+
+<h4 id="MessageDto中的Data-可以泛型化使用"><a href="#MessageDto中的Data-可以泛型化使用" class="headerlink" title="MessageDto中的Data 可以泛型化使用"></a>MessageDto中的Data 可以泛型化使用</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 跨语言使用Protostuff中提供的protobuff序列化传递复杂对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">byte</span>[] bytesData;</span><br><span class="line"><span class="keyword">private</span> Serializable serialData;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>当序列化和反序列化不需要跨平台使用时，可以直接使用Serializable类型，反之需要用byte数组保存数据，进行二次序列化和反序列化。同时可以在序列化工具类<code>ProtobufSerializer</code>中将ProtobufIOUtil修改为ProtostuffIOUtil</p>
+</li>
+<li><p>通过setData方法进行响应的操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Serializable</span>&gt; <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T object, <span class="type">boolean</span> isStuff)</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (isStuff) &#123;</span><br><span class="line">    setSerialData(object);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    setBytesData(object);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="跨语言Python中反序列化"><a href="#跨语言Python中反序列化" class="headerlink" title="跨语言Python中反序列化"></a>跨语言Python中反序列化</h4><h5 id="创建proto文件"><a href="#创建proto文件" class="headerlink" title="创建proto文件"></a>创建proto文件</h5><ul>
+<li><p>MessageDto.proto</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">MessageDto</span> &#123;</span><br><span class="line">    <span class="type">string</span> action=<span class="number">1</span>;</span><br><span class="line">    <span class="type">int32</span> state=<span class="number">2</span>;</span><br><span class="line">    <span class="type">bytes</span> data=<span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>RpcCmd.proto</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;MessageDto.proto&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">RpcCmd</span> &#123;</span><br><span class="line">    MessageDto message = <span class="number">1</span>;</span><br><span class="line">    <span class="type">string</span> randomKey = <span class="number">2</span>;</span><br><span class="line">    <span class="type">string</span> remoteAddressKey = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Point2PointMessage.proto</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">Point2PointMessage</span> &#123;</span><br><span class="line">    <span class="type">bytes</span> java_class = <span class="number">127</span>;</span><br><span class="line">    <span class="type">string</span> targetAddressKey = <span class="number">1</span>;</span><br><span class="line">    <span class="type">string</span> message = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>BytesData.proto</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"><span class="keyword">message </span><span class="title class_">BytesData</span> &#123;</span><br><span class="line">    <span class="type">bytes</span> content=<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="导出Python3对象定义文件"><a href="#导出Python3对象定义文件" class="headerlink" title="导出Python3对象定义文件"></a>导出Python3对象定义文件</h5><ul>
+<li>此时没有用到Any类型 可以直接导出为Python3的py文件</li>
+<li><code>protoc --python3_out=./gen RpcCmd.proto MessageDto.proto Point2PointMessage.proto BytesData.proto</code></li>
+<li>和pb2的区别是序列化和反序列化的方法名称进行了修改<ul>
+<li>pb2中用的是<code>ParseFromString</code>和<code>SerializeToString</code></li>
+<li>pb3中修改成了<code>encode_to_bytes</code>和<code>parse_from_bytes</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="在Python中使用-1"><a href="#在Python中使用-1" class="headerlink" title="在Python中使用"></a>在Python中使用</h5><ul>
+<li><p>同样的放到喜欢的包下，修改对应包名 这里不赘述</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># -*-coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> com.tony.proto.py3 <span class="keyword">import</span> RpcCmd, Point2PointMessage, MessageDto, BytesData</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">serialize_to_file</span>(<span class="params">file_path</span>):</span><br><span class="line">    p2p_msg = Point2PointMessage.Point2PointMessage()</span><br><span class="line">    p2p_msg.message = <span class="string">&quot;Hello, p2p from python&quot;</span></span><br><span class="line">    p2p_msg.targetAddressKey = <span class="string">&quot;/127.0.0.1:38211&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># bytes_data = BytesData.BytesData()</span></span><br><span class="line">    <span class="comment"># bytes_data.content = &quot;bytes data from python&quot;</span></span><br><span class="line"></span><br><span class="line">    rpc_cmd = RpcCmd.RpcCmd()</span><br><span class="line">    rpc_cmd.randomKey = <span class="string">&quot;random-key-key-random&quot;</span></span><br><span class="line">    rpc_cmd.remoteAddressKey = <span class="string">&quot;/127.0.0.1:1234&quot;</span></span><br><span class="line">    rpc_cmd.message.action = <span class="string">&quot;p2p&quot;</span></span><br><span class="line">    rpc_cmd.message.state = <span class="number">100</span></span><br><span class="line">    rpc_cmd.message.data = p2p_msg.encode_to_bytes()</span><br><span class="line">    <span class="comment"># rpc_cmd.message.data = bytes_data.encode_to_bytes()</span></span><br><span class="line">    bytes_write = rpc_cmd.encode_to_bytes()</span><br><span class="line"></span><br><span class="line">    fw = <span class="built_in">open</span>(file_path, mode=<span class="string">&quot;wb&quot;</span>)</span><br><span class="line">    fw.write(bytes_write)</span><br><span class="line">    fw.flush()</span><br><span class="line">    fw.close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;write bytes to file:&quot;</span>, bytes_write)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">deserialize_from_file</span>(<span class="params">file_path</span>):</span><br><span class="line">    fo = <span class="built_in">open</span>(file_path, mode=<span class="string">&quot;rb&quot;</span>)</span><br><span class="line">    bytes_read = fo.read()</span><br><span class="line">    fo.close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;read bytes from file:&quot;</span>, bytes_read)</span><br><span class="line">    rpc_cmd = RpcCmd.RpcCmd()</span><br><span class="line">    rpc_cmd.parse_from_bytes(bytes_read)</span><br><span class="line">    <span class="built_in">print</span>(rpc_cmd)</span><br><span class="line"></span><br><span class="line">    msg_bytes = rpc_cmd.message.data</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;message bytes&quot;</span>, msg_bytes)</span><br><span class="line">    p2p_msg = data_of(rpc_cmd.message, Point2PointMessage.Point2PointMessage)</span><br><span class="line">    <span class="comment"># bytes_data = data_of(rpc_cmd.message, BytesData.BytesData)</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;msg_content:&quot;</span>, p2p_msg.message)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;msg_target:&quot;</span>, p2p_msg.targetAddressKey)</span><br><span class="line">    <span class="comment"># print(&quot;bytes_data:&quot;, bytes_data.content)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">data_of</span>(<span class="params">message: RpcCmd.MessageDto, message_identify</span>):</span><br><span class="line">    content = message_identify()</span><br><span class="line">    content.parse_from_bytes(message.data)</span><br><span class="line">    <span class="keyword">return</span> content</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    serialize_file_path = <span class="string">&quot;./trans-data.dat&quot;</span></span><br><span class="line">    serialize_to_file(serialize_file_path)</span><br><span class="line">    deserialize_from_file(serialize_file_path)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果如下，同样的可以将bytes_data相关的注释取消同时注释掉p2p_msg相关的测试BytesData类型的序列化和反序列化</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">write bytes to file: b&#x27;\n3\n\x03p2p\x10d\x1a*\n\x10/127.0.0.1:38211\x12\x16Hello, p2p from python\x12\x15random-key-key-random\x1a\x0f/127.0.0.1:1234&#x27;</span><br><span class="line">read bytes from file: b&#x27;\n3\n\x03p2p\x10d\x1a*\n\x10/127.0.0.1:38211\x12\x16Hello, p2p from python\x12\x15random-key-key-random\x1a\x0f/127.0.0.1:1234&#x27;</span><br><span class="line">&lt;Message(RpcCmd)&gt;</span><br><span class="line">    &lt;MessageField(id=1, optional)&gt;:</span><br><span class="line">        &lt;Message(MessageDto)&gt;            &lt;StringField(id=1, optional)&gt;:                p2p            &lt;Int32Field(id=2, optional)&gt;:                100            &lt;BytesField(id=3, optional)&gt;:                b&#x27;\n\x10/127.0.0.1:38211\x12\x16Hello, p2p from python&#x27;</span><br><span class="line">    &lt;StringField(id=2, optional)&gt;:</span><br><span class="line">        random-key-key-random</span><br><span class="line">    &lt;StringField(id=3, optional)&gt;:</span><br><span class="line">        /127.0.0.1:1234</span><br><span class="line">message bytes b&#x27;\n\x10/127.0.0.1:38211\x12\x16Hello, p2p from python&#x27;</span><br><span class="line">msg_content: Hello, p2p from python</span><br><span class="line">msg_target: /127.0.0.1:38211</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="Python和Java互转"><a href="#Python和Java互转" class="headerlink" title="Python和Java互转"></a>Python和Java互转</h5><ul>
+<li>同样是仅仅修改序列化文件地址即可</li>
+</ul>
+<h6 id="Python反序列化Java-1"><a href="#Python反序列化Java-1" class="headerlink" title="Python反序列化Java"></a>Python反序列化Java</h6><ul>
+<li><pre><code class="python">java_serialize_file_path = $path_to_java_serialized$
+deserialize_from_file(java_serialize_file_path)
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 执行结果</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+read bytes from file: b&#39;\n-\n\x03p2p\x10d\x1a$\n\x0f/127.0.0.1:1233\x12\x11message from java\x12\x0fRANDOM_KEY_JAVA&#39;
+&lt;Message(RpcCmd)&gt;
+    &lt;MessageField(id=1, optional)&gt;:
+        &lt;Message(MessageDto)&gt;            &lt;StringField(id=1, optional)&gt;:                p2p            &lt;Int32Field(id=2, optional)&gt;:                100            &lt;BytesField(id=3, optional)&gt;:                b&#39;\n\x0f/127.0.0.1:1233\x12\x11message from java&#39;
+    &lt;StringField(id=2, optional)&gt;:
+        RANDOM_KEY_JAVA
+message bytes b&#39;\n\x0f/127.0.0.1:1233\x12\x11message from java&#39;
+msg_content: message from java
+msg_target: /127.0.0.1:1233
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">###### Java反序列化Python</span><br><span class="line"></span><br><span class="line">- ```java</span><br><span class="line">  @Test</span><br><span class="line">  public void deserializeFromPythonFile() throws Exception &#123;</span><br><span class="line">    RpcCmd rpcCmd = ProtobufSerializer.getInstance()</span><br><span class="line">      .deSerialize(new FileInputStream($python_serialize_path$), RpcCmd.class);</span><br><span class="line">    log.info(&quot;deserialize cmd:\n&#123;&#125;&quot;, rpcCmd);</span><br><span class="line">    log.info(&quot;deserialize p2p msg:\n&#123;&#125;&quot;, rpcCmd.getMessage().dataOfClazz(Point2PointMessage.class, false));</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">13:15:17.821 [main] INFO com.tony.simple.JavaProtostuffSerializeDemo - deserialize cmd:</span><br><span class="line">RpcCmd(message=MessageDto(action=p2p, state=100, bytesData=[10, 16, 47, 49, 50, 55, 46, 48, 46, 48, 46, 49, 58, 51, 56, 50, 49, 49, 18, 22, 72, 101, 108, 108, 111, 44, 32, 112, 50, 112, 32, 102, 114, 111, 109, 32, 112, 121, 116, 104, 111, 110], serialData=null), randomKey=random-key-key-random, remoteAddressKey=null)</span><br><span class="line">13:15:17.828 [main] INFO com.tony.simple.JavaProtostuffSerializeDemo - deserialize p2p msg:</span><br><span class="line">Point2PointMessage(targetAddressKey=/127.0.0.1:38211, message=Hello, p2p from python)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="io-protostuff使用总结"><a href="#io-protostuff使用总结" class="headerlink" title="io.protostuff使用总结"></a>io.protostuff使用总结</h4><ul>
+<li>在java平台可以直接定义普通的POJO而不需要手写proto文件并生成对应的对象文件，仅仅通过其所提供的<code>ProtobufIOUtil</code>或者<code>ProtostuffIOUtil</code>来实现序列化和反序列化即可。</li>
+<li>当需要进行跨语言序列化和反序列化时，需要其他语言中编写对应的proto文件并生成对象文件，而在Java中的泛型实例变量则需要进行修改，改成二次序列化的byte数组，方便在Python等语言中进行解析。Java中的序列化也应采用<code>ProtobufIOUtil</code>来实现。此时，Python中可以根据业务类型反序列化成指定的对象，Java中也以该对象来序列化，反过来也是一样的操作。以此来达到的目的是定义MessageDto之后如果需要扩展，不需要修改MessageDto，仅仅需要定义更多的data类型然后赋值给MessageDto.$data。</li>
+<li>对比纯protobuf实现的来说，在编码上更加简单，不需要写大量的Any.pack()和Any.unpack()</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://tonyjiangwj.github.io/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/" title="使用Protobuf实现跨语言序列化和反序列化，Java&amp;Python实例" target="_blank" rel="external">https://tonyjiangwj.github.io/2019/11/01/%E4%BD%BF%E7%94%A8Protobuf%E5%AE%9E%E7%8E%B0%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%8CJava-Python%E5%AE%9E%E4%BE%8B/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/tonyjiangwj" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/tonyjiangwj" target="_blank"><span class="text-dark">TonyJiangWJ</span><small class="ml-1x">Backend &amp; Rookie Web Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDMzNi8yMDg2OA==">
+        <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/07/21/%E8%87%AA%E5%BB%BAkms%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E9%80%9A%E8%BF%87docker%E9%83%A8%E7%BD%B2/" title="自建kms服务器并通过docker部署"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/10/17/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1TX-LCN%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="分布式事务TX-LCN原理分析"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/tonyjiangwj" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+<script defer type="text/javascript">
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+
+    if (typeof LivereTower === 'function') { return; }
+
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>
